@@ -13,6 +13,13 @@ body {
   box-sizing: border-box;
 }
 
+button, i {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 body, input, textarea {
   font-family: 'Roboto', sans-serif;
 }
@@ -104,6 +111,10 @@ header::before, footer::before {
   color: #b90504;
 }
 
+.position_absolute {
+  position: absolute;
+}
+
 .grid {
   display: grid;
 }
@@ -130,7 +141,7 @@ header::before, footer::before {
 
 #main_container {
   width: 90%;
-  height: 100%;
+  min-height: 100%;
   max-width: 960px;
   margin: 0 auto;
   grid-template-rows: 80px auto 40px;
@@ -139,6 +150,7 @@ header::before, footer::before {
 #page_contents {
   padding: 1rem .5rem;
   align-self: start;
+  position: relative;
 }
 
 #page_contents > h2 {
@@ -173,53 +185,13 @@ button:hover {
   background: #b90504;
 }
 
-#login_form {
-  grid-template-columns: auto 1fr;
-  grid-row-gap: 1rem;
-  justify-items: start;
-  align-items: center;
-}
-
-#login_form button {
-  margin-right: 1rem;
-  justify-self: end;
-}
-
-#login_form input[type="submit"] {
-  display: none;
-}
-
-#login_form input {
-  width: calc(100% - 2rem);
-  font-size: 17px;
-  padding: .25rem;
-  margin: 0 1rem;
-}
-
-#sign_up {
-  text-align: right;
-}
-
 @media screen and (max-width: 767px) {
-  #sign_up {
-    margin: 1.5rem 1rem 0 0;
-  }
-
   .popup {
     width: 90%;
   }
 }
 
 @media screen and (min-width: 768px) {
-  #login_page #page_contents {
-    grid-template-columns:  1fr 1fr;
-  }
-
-  #sign_up {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
   .popup {
     max-width: 100%;
   }

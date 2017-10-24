@@ -46,10 +46,13 @@ header {
   height: 80px;
   line-height: 80px;
   padding: 0 .25rem;
-  color: #fff;
   background: transparent;
   font-family: 'Unica One', cursive;
   text-transform: lowercase;
+}
+
+header a {
+  color: #fff !important;
 }
 
 header::before {
@@ -88,6 +91,7 @@ header::before, footer::before {
 }
 
 .popup {
+  display: grid;
   position: fixed;
   background: #f7b538;
   color: #333;
@@ -96,7 +100,7 @@ header::before, footer::before {
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  box-shadow: 0 0 10px #333;
+  box-shadow: 1px 1px 3px #333;
   grid-template-columns: auto auto;
   grid-column-gap: .25rem;
   align-items: center;
@@ -111,12 +115,50 @@ header::before, footer::before {
   color: #b90504;
 }
 
+.popup.big_popup {
+  top: calc(80px + 1rem);
+  background: #e8e8e8;
+  width: 60%;
+  max-width: 600px;
+  z-index: 1;
+  padding: 0;
+  grid-template-columns: auto;
+  grid-template-rows: auto 1fr auto;
+}
+
+.popup.big_popup > .header,
+.popup.big_popup > .contents_wrapper {
+  padding: .5rem;
+}
+
+.popup.big_popup > .header  {
+  background: #f7b538;
+}
+
+.popup.big_popup > .contents_wrapper {
+  text-align: justify;
+  align-self: start;
+}
+
+.popup.big_popup  div[contentEditable="true"]:focus {
+  outline: none;
+}
+
+.popup.big_popup > button.save {
+  justify-self: center;
+  margin: .5rem 0;
+}
+
 .position_absolute {
   position: absolute;
 }
 
 .grid {
   display: grid;
+}
+
+.grid.grid_horizontal {
+  grid-auto-flow: column;
 }
 
 .block {

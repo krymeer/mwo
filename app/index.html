@@ -13,17 +13,13 @@
   <body>
     <div class="grid" id="main_container">
       <popup></popup>
+      <note-popup></note-popup>
       <todo-header></todo-header>
       <div class="grid" id="page_contents">
         <h2>pulpit</h2>
-        <i class="material-icons" v-show="!no_notes" @click="add_note" id="add_note">note_add</i>
-        <div v-show="no_notes" id="no_notes">
-          Nie masz jeszcze żadnych notatek.
-          <button @click="add_first_note">dodaj nową</button>
-        </div>
-        <div v-show="!no_notes" class="grid" id="grid_of_notes">
-          <div class="note" v-for="note of notes">{{ note }}</div>
-        </div>
+        <any-notes-btn></any-notes-btn>
+        <no-notes></no-notes>
+        <list-of-notes></list-of-notes>
       </div>
       <todo-footer></todo-footer>
     </div>

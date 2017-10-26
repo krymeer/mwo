@@ -5,5 +5,5 @@ Aplikacja webowa stworzona na potrzeby kursu ‒ pozwala na tworzenie list zada�
 **Postęp prac\*:** prosty interfejs graficzny, dodawanie, edytowanie i usuwanie notatek bez zapisu**
 
 ---
-*) na dzień **26.10.2017 r.**
+*) na dzień **26.10.2017 r.**  
 **) tj. wyłącznie w warstwie front-endu

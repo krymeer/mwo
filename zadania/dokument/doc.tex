@@ -89,4 +89,79 @@
     \item ServiceWorker umożliwi korzystanie z aplikacji nawet wtedy, kiedy sieć internetowa nie jest w ogóle dostępna. Taka funkcjonalność może stanowić jedną z cech wyróżniających projekt. 
     \item DynamoDB - szybkość działania oraz kontrola poprzez komendy w języku JavaScript, z\,którego projekt w dużej mierze korzysta. Mniejszy początkowy narzut pracy w stosunku do tradycyjnych baz relacyjnych. 
   \end{enumerate}
+
+  \section{Projekt systemu z przykładowymi diagramami UML}
+
+  \begin{figure}[h!]
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{../diagramy/diagram_stanow_1.png}
+    \end{center}
+    \caption{diagram aktywności: wyświetlenie notatek użytkownika}
+  \end{figure}
+
+  Projekt jest zrealizowany poprzez aplikację webową, którą generalnie można podzielić na dwie warstwy: front-end, obsługujący zdarzenia wywoływane od użytkownika, gromadzi dane i wyświetla interfejs graficzny, a także back-end, służący do komunikacji z serwerem, utrwalania notatek, autoryzacji użytkownika, przechowywania danych na jego temat itd.\newline
+
+  \noindent Dodatkowy diagram projektu znajduje się pod adresem:\newline\url{https://github.com/krymeer/mwo/blob/master/zadania/diagramy/architektura.pdf}
+
+  \begin{figure}[h!]
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{../diagramy/diagram_stanow_2.png}
+    \end{center}
+    \caption{diagram aktywności: dodanie notatki użytkownika}
+  \end{figure}
+
+
+  \section{Wyszczególnienie ryzyk projektowych wraz z ich planami naprawczymi i metodami zapobiegania}
+  
+    \subsection{Brak czasu}
+      \noindent\textbf{Opis:} Niewystarczająca ilość czasu na zrealizowanie wszystkich celów i wdrożenie zaplanowanych funkcjonalności.
+      
+      \noindent\textbf{Rozwiązanie:} zmniejszenie listy prac do wykonania, zredukowanie funkcjonalności aplikacji do tych koniecznych czy najistotniejszych.
+      
+      \noindent\textbf{Zapobieganie:} rozwijanie systemu na bieżąco, regularna kontrola postępu prac.
+
+    \subsection{Awaria systemu}
+      \noindent\textbf{Opis:} wystąpienie błędów w działaniu aplikacji spowodowanych wprowadzonymi w niej zmianami.
+      
+      \noindent\textbf{Rozwiązanie:} przywrócenie ostatniej sprawnej wersji systemu (przechowywanego na repozytorium).
+      
+      \noindent\textbf{Zapobieganie:} sprawdzanie działania systemu po każdej zmianie oraz eliminowanie w porę ewentualnych usterek.
+
+    \subsection{Niewystarczające zasoby ludzkie}
+      \noindent\textbf{Opis:} jeden (lub więcej) członków zespołu projektowego nie może lub odmawia wykonywania dalszych prac nad aplikacją.
+      
+      \noindent\textbf{Rozwiązanie:} przypisanie nieprzydzielonych zadań innym uczestnikom, ograniczenie liczby prac do wykonania w projekcie, ewentualnie znalezienie nowych współpracowników.
+      
+      \noindent\textbf{Zapobieganie:} ciągłe dbanie o motywację do działania każdego członka zespołu, skłanianie uczestników do systematycznej pracy.
+
+    \subsection{Trudności implementacyjne}
+      \noindent\textbf{Opis:} zaplanowane zadanie jest niemożliwe do zrealizowania bądź znacząco przekracza umiejętności wdrażającej je osoby.
+
+      \noindent\textbf{Rozwiązanie:} w drugim przypadku -- przypisanie zadania innemu członkowi zespołu, w pierwszym -- znalezienie alternatywnego rozwiązania lub bezterminowe zawieszenie wykonywania zadania.
+      
+      \noindent\textbf{Zapobieganie:} rzetelnie sprawdzanie zarówno możliwości używanych technologii, jak i korzystających z nich członków zespołu.
+
+  \section{Podział prac implementacyjnych na dwie trzytygodniowe iteracje}
+    \subsection{Iteracja pierwsza}
+      \textbf{Czas trwania:} 23 października -- 12 listopada 2017 roku
+      \begin{itemize}
+        \item zaprojektowanie systemu;
+        \item przydzielenie zadań uczestnikom projektu;
+        \item zaimplementowanie podstawowej funkcjonalności, tj. dodawania, usuwania i modyfikowania notatek, zakładania kont użytkowników, zapewnienia bezpieczeństwa danych;
+        \item testowanie bazowej funkcjonalności pod kątem poprawności i efektywności działania, szukanie ewentualnych błędów;
+        \item wybór najważniejszych zadań do wykonania w drugiej iteracji.
+      \end{itemize}
+    \subsection{Iteracja druga}
+      \textbf{Czas trwania:} 13 listopada -- 3 grudnia 2017 roku
+      \begin{itemize}
+        \item ponowne omówienie projektu i podzielenie prac na uczestników;
+        \item zaimplementowanie dodatkowych funkcjonalności, takich jak: rozszerzenie do przeglądarki, pobieranie danych z zewnętrznych systemów (JSOS, Facebook, Google itp.) czy udostępnianie wydarzeń;
+        \item próba wdrożenia nowoczesnych technologii chmurowych;
+        \item wprowadzenie przykładowych danych do systemu;
+        \item testowanie aplikacji po wprowadzeniu każdej większej zmiany;
+        \item zaproszenie osób trzecich do sprawdzenia działania systemu;
+        \item opracowanie ewentualnej dokumentacji lub samouczka objaśniającego, jak należy korzystać z aplikacji;
+        \item zarchiwizowanie zbędnych plików, folderów i innych danych;
+        \item podsumowanie wykonanych działań i wyciągnięcie ewentualnych wniosków.
+      \end{itemize}
 \end{document}

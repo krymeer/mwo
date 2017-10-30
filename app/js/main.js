@@ -5,9 +5,9 @@ window.onload = function() {
     show_big_popup: false,
     show_placeholder: true,
     popup_msg: '',
-    messages: ['Żadne pole nie może pozostać puste.'],
+    messages: [ 'Żadne pole nie może pozostać puste.'],
     notes: [],
-    note_id: 0
+    note_id: -1
   }
 
   Vue.component('popup', {
@@ -35,7 +35,7 @@ window.onload = function() {
     methods: {
       save_note: function() {
         var text = document.getElementById('note_contents').innerText;
-        Vue.set(globals.notes, globals.note_id, {contents: text});
+        Vue.set(globals.notes, globals.note_id, {contents: text, show_deletion_bar: false});
         globals.note_id = -1;
         globals.show_big_popup = false;
       },
@@ -72,15 +72,18 @@ window.onload = function() {
     template: '\
       <div v-show="!no_notes" class="grid" id="grid_of_notes"> \
         <div class="note" v-for="(note, index) in notes"> \
-          {{ note.contents }} \
-          <div class="btn_panel" v-show="!show_big_popup"> \
+          <div class="deletion_bar" v-show="note.show_deletion_bar"><span>usunąć?</span> \
+            <i class="material-icons" @click="delete_note(index)">check</i> <i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">close</i>  \
+          </div> \
+          <span>{{ note.contents }}</span> \
+          <div class="btn_panel" v-show="!show_big_popup && !note.show_deletion_bar"> \
             <i class="material-icons" @click="edit_note(index)">mode_edit</i> \
-            <i class="material-icons" @click="delete_note(index)">delete</i> \
+            <i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">delete</i> \
           </div> \
         </div> \
       </div>',
     data: function() {
-      return globals
+      return globals;
     },
     methods: {
       edit_note: function(k) {
@@ -137,7 +140,8 @@ window.onload = function() {
       },
       add_note: function() {
         globals.notes.push({
-          contents: ''
+          contents: '',
+          show_deletion_bar: false
         });
       },
       add_first_note: function() {
@@ -147,6 +151,9 @@ window.onload = function() {
       delete_note: function(k) {
         if (k > -1 && k < globals.notes.length) {
           globals.notes.splice(k, 1);
+          if (globals.notes.length === 0) {
+            globals.no_notes = true;
+          }
         }
       },
       edit_note: function(k) {

@@ -21,11 +21,29 @@ body {
   border: 1.5px dashed #333;
   position: relative;
   padding: .25rem;
+  overflow: hidden;
+}
+
+#note_contents, .note {
   word-wrap: break-word;
+}
+
+.note::after {
+  content: '';
+  width: calc(100% - 1px);
+  height: 20px;
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  background: linear-gradient(rgba(246, 246, 246, 0), rgba(246, 246, 246, .95));
 }
 
 .note:hover {
   border-color: #b90504;
+}
+
+.contents_wrapper {
+  max-width: 600px;
 }
 
 .btn_panel {
@@ -41,6 +59,39 @@ body {
   display: grid;
   grid-template-columns: auto auto;
   grid-column-gap: 1rem;
+}
+
+.note > .deletion_bar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  background: #666;
+  padding: .25rem;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  grid-row-gap: .125rem;
+}
+
+
+.note > .deletion_bar > span {
+  grid-column: span 2;
+}
+
+.note > .deletion_bar > i {
+  justify-self: center;
+  grid-row: 2;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.note > .deletion_bar > i:hover {
+  color: #f7b538;
 }
 
 .btn_panel i {

@@ -20,7 +20,7 @@
         <div v-show="!valid_mail">      
           <div>Podaj swój adres e-mail, by otrzymać wiadomość z linkiem resetującym hasło:</div>
           <form class="grid" id="lost_pass_form" @submit.prevent>
-            <input type="text" onkeypress="return handle_mail(event)" v-model="mail">
+            <input type="text" onkeypress="return handle_input(event, mail_regex)" v-model="mail">
             <button @click="check_mail_for_pass">gotowe</button>
           </form>
         </div>

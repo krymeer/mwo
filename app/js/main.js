@@ -1,14 +1,15 @@
-var mail_regex = /[a-z0-9@._-]/i;
+var mail_regex = /[a-z0-9@._-]/i,
+    login_regex = /[a-z0-9_]/i,
+    password_regex = /[a-z0-9!@#$%^&*()-_+=~`]/i
 
-function handle_mail(e) {
-  if (!mail_regex.test(e.key)) {
+function handle_input(e, regex) {
+  if (!regex.test(e.key)) {
     return false;
   }
   return true;
 }
 
 window.onload = function() {
-
   var globals = {
     no_notes: true,
     show_popup: false,

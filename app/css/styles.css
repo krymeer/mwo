@@ -51,10 +51,6 @@ header {
   text-transform: lowercase;
 }
 
-header a {
-  color: #fff !important;
-}
-
 header::before {
   top: 0;
   height: 80px;
@@ -90,6 +86,36 @@ header::before, footer::before {
   z-index: -1;
 }
 
+header {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+header > a,
+header > a:first-of-type:hover {
+  color: #fff
+}
+
+header > a {
+  height: 80px;
+}
+
+header > a:first-of-type {
+  justify-self: start;
+}
+
+header i.material-icons {
+  justify-self: end;
+  align-self: center;
+  color: #fff;
+  font-size: 3.5rem;
+  cursor: pointer;
+}
+
+header i.material-icons:hover {
+  color: #f7b538;
+}
+
 .popup {
   display: grid;
   position: fixed;
@@ -97,11 +123,11 @@ header::before, footer::before {
   color: #333;
   padding: .5rem;
   border-radius: 4px;
-  top: 1rem;
+  top: 40px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   box-shadow: 1px 1px 3px #333;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
   grid-column-gap: .25rem;
   align-items: center;
 }
@@ -167,6 +193,46 @@ header::before, footer::before {
 
 .inline-block {
   display: inline-block;
+}
+
+.margin-top {
+  margin-top: 1rem;
+}
+
+.margin-bottom {
+  margin-bottom: 1rem;
+}
+
+.margin-left {
+  margin-left: 1rem;
+}
+
+.margin-right {
+  margin-right: 1rem;
+}
+
+.margin-top-75 {
+  margin-top: .75rem;
+}
+
+.margin-right-75 {
+  margin-right: .75rem;
+}
+
+.margin-bottom-75 {
+  margin-bottom: .75rem;
+}
+
+.margin-left-75 {
+  margin-left: .75rem;
+}
+
+.justify-self-start {
+  justify-self: start;
+}
+
+.justify-self-end {
+  justify-self: end;
 }
 
 .font_small {

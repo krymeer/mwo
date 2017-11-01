@@ -1,0 +1,16 @@
+#lost_pass_form {
+  margin: 1rem auto;
+  max-width: 400px;
+  width: 100%;
+}
+
+#lost_pass_form input {
+  width: 100%;
+  padding: .25rem;
+  font-size: 1.25rem;
+}
+
+#lost_pass_form button {
+  margin-top: .75rem;
+  justify-self: end;
+}

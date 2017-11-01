@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/lost_pass.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="js/vue.min.js"></script>
+    <script src="js/main.js"></script>
+    <title>Zapomnialem hasła | ToDoApp</title>
+  </head>
+  <body>
+    <div class="grid" id="main_container">
+      <popup></popup>
+      <note-popup></note-popup>
+      <todo-header></todo-header>
+      <div class="grid" id="page_contents">
+        <h2>zapomniałem hasła</h2>
+        <div v-show="!valid_mail">      
+          <div>Podaj swój adres e-mail, by otrzymać wiadomość z linkiem resetującym hasło:</div>
+          <form class="grid" id="lost_pass_form" @submit.prevent>
+            <input type="text" onkeypress="return handle_mail(event)" v-model="mail">
+            <button @click="check_mail_for_pass">gotowe</button>
+          </form>
+        </div>
+        <div v-show="valid_mail">
+          Podany e-mail jest poprawny i znajduje się w naszej bazie.<br>
+          Użyj linka w wysłanej do Ciebie wiadomości, aby zakończyć proces odzyskiwania hasła.
+          <button class="block margin-top-75" @click="goto('login')">dzięki</button>
+        </div>
+      </div>
+      <todo-footer></todo-footer>
+    </div>
+  </body>
+</html>

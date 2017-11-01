@@ -1,17 +1,27 @@
+var mail_regex = /[a-z0-9@._-]/i;
+
+function handle_mail(e) {
+  if (!mail_regex.test(e.key)) {
+    return false;
+  }
+  return true;
+}
+
 window.onload = function() {
+
   var globals = {
     no_notes: true,
     show_popup: false,
     show_big_popup: false,
     show_placeholder: true,
     popup_msg: '',
-    messages: [ 'Żadne pole nie może pozostać puste.'],
+    messages: ['Żadne pole nie może pozostać puste.', 'To pole nie może pozostać puste.'],
     notes: [],
     note_id: -1
   }
 
   Vue.component('popup', {
-    template: '<div class="popup" v-show="show_popup">{{ popup_msg }}<i class="material-icons" @click="show_popup = !show_popup">close</i></div>',
+    template: '<div class="popup" v-show="show_popup">{{ popup_msg }}</div>',
     data: function() {
       return globals
     }
@@ -120,22 +130,59 @@ window.onload = function() {
   })
 
   Vue.component('todo-header', {
-    template: '<header><a class="block" href="index.html"><h1>ToDoApp</h1></a></header>'
+    props: ['materialIcon'],
+    template: '\
+      <header> \
+        <a class="block" href="index.html"> \
+          <h1>ToDoApp</h1> \
+        </a> \
+        <i v-show="materialIcon" class="material-icons" @click="click_icon">{{ materialIcon }}</i>\
+      </header>',
+    methods: {
+      click_icon: function() {
+        var i_id = this._props.materialIcon;
+        if (i_id === 'power_settings_new') {
+          window.location.href = "login.html?logout";
+        }
+      }
+    }
   })
 
   var app = new Vue({
     el: '#main_container',
     data: {
       login: '',
-      password: ''
+      password: '',
+      mail: '',
+      valid_mail: false
     },
     methods: {
+      goto: function(name) {
+        var url;
+        switch(name) {
+          case 'login':
+            url = 'login.html';
+            break;
+          default:
+            url = 'index.html';
+        }
+        window.location.href = url;
+      },
       check_input: function() {
         if (this.login === '' || this.password === '') {
           globals.popup_msg = globals.messages[0];
           globals.show_popup = true;
         } else {
           window.location.href = 'index.html';
+        }
+      },
+      check_mail_for_pass: function() {
+        if (this.mail === '') {
+          globals.popup_msg = globals.messages[1];
+          globals.show_popup = true;
+        } else {
+          globals.show_popup = false;
+          this.valid_mail = true;
         }
       },
       add_note: function() {

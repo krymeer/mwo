@@ -13,14 +13,13 @@
   <body>
     <div class="grid" id="main_container">
       <popup></popup>
-      <note-popup></note-popup>
       <todo-header></todo-header>
       <div class="grid" id="page_contents">
         <h2>zapomniałem hasła</h2>
         <div v-show="!valid_mail">      
           <div>Podaj swój adres e-mail, by otrzymać wiadomość z linkiem resetującym hasło:</div>
           <form class="grid" id="lost_pass_form" @submit.prevent>
-            <input type="text" onkeypress="return handle_input(event, mail_regex)" v-model="mail">
+            <input maxlength="64" type="text" onkeypress="return handle_input(event, mail_regex)" v-model="mail">
             <button @click="check_mail_for_pass">gotowe</button>
           </form>
         </div>

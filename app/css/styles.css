@@ -116,6 +116,26 @@ header i.material-icons:hover {
   color: #f7b538;
 }
 
+span.tooltip > span.visible {
+  cursor: pointer;
+}
+
+span.tooltip > span.visible:hover {
+  color: #b90504;
+}
+
+span.tooltip > span.hidden {
+  position: absolute;
+  background: #b90504;
+  color: #fff;
+  padding: .25rem;
+}
+
+.app_name {
+  color: #910000;
+  font-weight: bold;  
+}
+
 .popup {
   display: grid;
   position: fixed;
@@ -294,9 +314,11 @@ button:hover {
 }
 
 @media screen and (max-width: 767px) {
+  /*
   .popup {
     width: 90%;
   }
+  */
 }
 
 @media screen and (min-width: 768px) {

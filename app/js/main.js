@@ -149,15 +149,63 @@ window.onload = function() {
     }
   })
 
+  Vue.component('tooltip', {
+    props: ['hidden-contents', 'contents'],
+    template: '\
+      <span class="tooltip"> \
+        <span class="hidden" style="display: none">{{ hiddenContents }}</span> \
+        <span class="visible" v-on:mouseout="mouse_out" v-on:mouseover="mouse_over">{{ contents }}</span>\
+      </span>',
+    methods: {
+      mouse_over: function(e) {
+        var tooltip_contents = e.target.parentElement.childNodes[0];
+        tooltip_contents.style.display = 'block';
+
+        var parent = e.target.parentElement,
+            top = parent.offsetTop,
+            left = parent.offsetLeft,
+            h = tooltip_contents.offsetHeight,
+            w = tooltip_contents.offsetWidth;
+        tooltip_contents.style.top = (top-h)+'px';
+        tooltip_contents.style.left = left+'px';
+        tooltip_contents.style.right = '';
+        if (parent.parentElement.offsetWidth-left < w) {
+          tooltip_contents.style.left = '';
+          tooltip_contents.style.right = '0px';
+        }
+      },
+      mouse_out: function(e) {
+        var tooltip_contents = e.target.parentElement.childNodes[0];
+        tooltip_contents.style.display = 'none';
+      }
+    }
+  })
+
   var app = new Vue({
     el: '#main_container',
     data: {
       login: '',
       password: '',
+      password_cp: '',
       mail: '',
-      valid_mail: false
+      valid_mail: false,
+      sign_up_success: false
     },
     methods: {
+      input_blur: function(e) {
+        if (e.target.value === '') {
+          if (e.target.className.indexOf('empty') === -1) {
+            e.target.className += ' empty';
+          }
+        } else {
+          e.target.className = e.target.className.replace('empty', '');
+        }
+      },
+      input_focus: function(e) {
+        if (e.target.className.indexOf('empty') >= 0) {
+          e.target.className = e.target.className.replace('empty', '');
+        }
+      },
       goto: function(name) {
         var url;
         switch(name) {
@@ -168,6 +216,25 @@ window.onload = function() {
             url = 'index.html';
         }
         window.location.href = url;
+      },
+      check_sign_up_form: function() {
+        if (this.login === '' || this.password === '' || this.password_cp === '' || this.mail === '') {
+          globals.popup_msg = globals.messages[0];
+          globals.show_popup = true;
+          var input_fields = document.getElementsByClassName('sign_up_input');
+          for (var k = 0; k < input_fields.length; k++) {
+            if (input_fields[k].value === '') {
+              if (input_fields[k].className.indexOf('empty') === -1) {
+                input_fields[k].className += ' empty';
+              }
+            } else {
+              input_fields[k].className = input_fields[k].className.replace('empty', '');
+            }
+          }
+        } else {
+          globals.show_popup = false;
+          this.sign_up_success = true;
+        }
       },
       check_input: function() {
         if (this.login === '' || this.password === '') {

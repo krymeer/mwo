@@ -2,11 +2,24 @@ var mail_regex = /[a-z0-9@._-]/i,
     login_regex = /[a-z0-9_]/i,
     password_regex = /[a-z0-9!@#$%^&*()-_+=~`]/i
 
+var user_id = 0;
+
 function handle_input(e, regex) {
   if (!regex.test(e.key)) {
     return false;
   }
   return true;
+}
+
+function sort_by_id(a, b) {
+  return a.id > b.id;
+}
+
+function get_date() {
+  var date = new Date();
+  var d = date.toISOString().slice(0, 19).replace('T', ' ');
+  d = d.replace(d.slice(11, 19), date.toLocaleTimeString());
+  return d;
 }
 
 window.onload = function() {
@@ -18,7 +31,7 @@ window.onload = function() {
     popup_msg: '',
     messages: ['Żadne pole nie może pozostać puste.', 'To pole nie może pozostać puste.'],
     notes: [],
-    note_id: -1
+    note_no: -1
   }
 
   Vue.component('popup', {
@@ -37,8 +50,8 @@ window.onload = function() {
         </div> \
         <div class="contents_wrapper"> \
           <div id="note_placeholder" v-show="show_placeholder">Tu wpisz swoją notatkę...</div> \
-          <div contentEditable="true" v-on:keyup="handle_note_text" class="contents" id="note_contents" v-if="notes.length > 0 && note_id > -1"> \
-            {{ notes[note_id].contents }} \
+          <div contentEditable="true" v-on:keyup="handle_note_text" class="contents" id="note_contents" v-if="notes.length > 0 && note_no > -1"> \
+            {{ notes[note_no].contents }} \
           </div> \
         </div> \
         <button class="save" @click="save_note">zapisz</button> \
@@ -46,8 +59,10 @@ window.onload = function() {
     methods: {
       save_note: function() {
         var text = document.getElementById('note_contents').innerText;
-        Vue.set(globals.notes, globals.note_id, {contents: text, show_deletion_bar: false});
-        globals.note_id = -1;
+        var note_id = globals.notes[globals.note_no].id;
+        Vue.set(globals.notes, globals.note_no, {id: note_id, contents: text, show_deletion_bar: false});
+        Vue.http.post('/q.php', {action: 'save_note', contents: text, user_id: user_id, note_id: note_id});
+        globals.note_no = -1;
         globals.show_big_popup = false;
       },
       handle_note_text: function(event) {
@@ -107,6 +122,23 @@ window.onload = function() {
           app.delete_note(k);
         }
       }
+    }, mounted: function() {
+      Vue.http.post('/q.php', {action: 'get_notes', user_id: user_id}).then(response => {
+        var arr = response.body;
+        if (arr.length > 0) {
+          for (var k in arr) {
+            globals.notes.push({
+              id: arr[k].id,
+              contents: arr[k].msg,
+              show_deletion_bar: false
+            });
+            globals.notes.sort(sort_by_id);
+            globals.no_notes = false;
+          }
+        }
+      }, response => {
+        console.error('Loading notes failed')
+      });
     }
   })
 
@@ -254,10 +286,13 @@ window.onload = function() {
         }
       },
       add_note: function() {
+        var k = globals.notes[globals.notes.length-1].id + 1;
         globals.notes.push({
+          id: k,
           contents: '',
           show_deletion_bar: false
         });
+        Vue.http.post('/q.php', {action: 'add_note', user_id: user_id, note_id: k, date: get_date()});
       },
       add_first_note: function() {
         globals.no_notes = false;
@@ -265,21 +300,26 @@ window.onload = function() {
       },
       delete_note: function(k) {
         if (k > -1 && k < globals.notes.length) {
+          var note_id = globals.notes[k].id;
           globals.notes.splice(k, 1);
           if (globals.notes.length === 0) {
             globals.no_notes = true;
           }
+          Vue.http.post('/q.php', {action: 'delete_note', user_id: user_id, note_id: note_id});
         }
       },
       edit_note: function(k) {
         if (k > -1 && k < globals.notes.length) {
-          globals.note_id = k;
+          globals.note_no = k;
           globals.show_big_popup = true;
           if (globals.notes[k].contents.replace(/ /g, '').length === 0) {
             globals.show_placeholder = true;
+          } else {
+            globals.show_placeholder = false;
           }
         }
       }
     }
   });
+
 }

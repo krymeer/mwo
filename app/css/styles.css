@@ -186,6 +186,10 @@ span.tooltip > span.hidden {
   align-self: start;
 }
 
+.contents_wrapper > .contents {
+	height: 19px;
+}
+
 .popup.big_popup  div[contentEditable="true"]:focus {
   outline: none;
 }

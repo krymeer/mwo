@@ -66,7 +66,7 @@ window.onload = function() {
         globals.show_big_popup = false;
       },
       handle_note_text: function(event) {
-        var text = event.target.innerText;
+        var text = event.target.innerText.trim();
         if (text.length > 0) {
           globals.show_placeholder = false;
         } else {
@@ -286,7 +286,9 @@ window.onload = function() {
         }
       },
       add_note: function() {
-        var k = globals.notes[globals.notes.length-1].id + 1;
+      	var k = 0;
+        if( globals.notes.length > 0 ) globals.notes[ globals.notes.length - 1 ].id + 1;
+        // var k = globals.notes[ Math.max( 0, globals.notes.length - 1 ) ].id + 1;
         globals.notes.push({
           id: k,
           contents: '',

@@ -2,9 +2,9 @@
 
 	function get_db() {
 
-		$server = "s24.zbpma.pl";
-		$user = "kovalson_todoapp";
-		$pass = "todoapp";
+		$server = "localhost";
+		$user = "root";
+		$pass = "";
 		$db = "todoapp";
 
 		$mysqli = new mysqli($server, $user, $pass, $db);

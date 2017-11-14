@@ -14,7 +14,11 @@
 	$stmt = $db->prepare( $q );
 	$stmt->execute();
 	if ($res = $stmt->get_result()) {
-		if( $res->num_rows > 0 ) $_SESSION["user_logged"] = TRUE;
+		if( $res->num_rows > 0 ) {
+			$row = $res->fetch_assoc();
+			$_SESSION["user_logged"] = TRUE;
+			$_SESSION["user_id"] = $row[ "user_id" ];
+		}
 		else $_SESSION["user_logged"] = FALSE;
 	}
 	$stmt->close();

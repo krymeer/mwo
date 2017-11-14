@@ -2,7 +2,7 @@ var mail_regex = /[a-z0-9@._-]/i,
     login_regex = /[a-z0-9_]/i,
     password_regex = /[a-z0-9!@#$%^&*()-_+=~`]/i
 
-var user_id = 0;
+var user_id = (typeof session_user_id != "undefined") ? session_user_id : 0;
 
 function handle_input(e, regex) {
   if (!regex.test(e.key)) {
@@ -61,7 +61,7 @@ window.onload = function() {
         var text = document.getElementById('note_contents').innerText;
         var note_id = globals.notes[globals.note_no].id;
         Vue.set(globals.notes, globals.note_no, {id: note_id, contents: text, show_deletion_bar: false});
-        Vue.http.post('/q.php', {action: 'save_note', contents: text, user_id: user_id, note_id: note_id});
+        Vue.http.post('q.php', {action: 'save_note', contents: text, user_id: user_id, note_id: note_id});
         globals.note_no = -1;
         globals.show_big_popup = false;
       },
@@ -123,7 +123,7 @@ window.onload = function() {
         }
       }
     }, mounted: function() {
-      Vue.http.post('/q.php', {action: 'get_notes', user_id: user_id}).then(response => {
+      Vue.http.post( "q.php", {action: 'get_notes', user_id: user_id}).then(response => {
         var arr = response.body;
         if (arr.length > 0) {
           for (var k in arr) {
@@ -298,7 +298,8 @@ window.onload = function() {
           contents: '',
           show_deletion_bar: false
         });
-        Vue.http.post('/q.php', {action: 'add_note', user_id: user_id, note_id: k, date: get_date()});
+        var obj = {action: 'add_note', user_id: user_id, note_id: k, date: get_date()}
+        Vue.http.post( "q.php", obj);
       },
       add_first_note: function() {
         globals.no_notes = false;
@@ -311,7 +312,7 @@ window.onload = function() {
           if (globals.notes.length === 0) {
             globals.no_notes = true;
           }
-          Vue.http.post('/q.php', {action: 'delete_note', user_id: user_id, note_id: note_id});
+          Vue.http.post( "q.php", {action: 'delete_note', user_id: user_id, note_id: note_id});
         }
       },
       edit_note: function(k) {

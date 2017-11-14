@@ -1,4 +1,7 @@
 <?php
+  
+  extract( $_POST );
+
   require_once('db.php');
 
   function is_natural($id) {

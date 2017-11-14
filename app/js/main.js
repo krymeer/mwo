@@ -166,7 +166,7 @@ window.onload = function() {
     props: ['materialIcon'],
     template: '\
       <header> \
-        <a class="block" href="index.html"> \
+        <a class="block" href="./"> \
           <h1>ToDoApp</h1> \
         </a> \
         <i v-show="materialIcon" class="material-icons" @click="click_icon">{{ materialIcon }}</i>\
@@ -175,7 +175,7 @@ window.onload = function() {
       click_icon: function() {
         var i_id = this._props.materialIcon;
         if (i_id === 'power_settings_new') {
-          window.location.href = "login.html?logout";
+          window.location.href = "./logout.php";
         }
       }
     }
@@ -264,8 +264,11 @@ window.onload = function() {
             }
           }
         } else {
+          document.getElementById("sign_up_form").submit();
+          /*
           globals.show_popup = false;
           this.sign_up_success = true;
+          */
         }
       },
       check_input: function() {
@@ -273,7 +276,8 @@ window.onload = function() {
           globals.popup_msg = globals.messages[0];
           globals.show_popup = true;
         } else {
-          window.location.href = 'index.html';
+          // window.location.href = 'index.html';
+          document.getElementById("login_form").submit();
         }
       },
       check_mail_for_pass: function() {

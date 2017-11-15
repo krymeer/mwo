@@ -18,8 +18,10 @@
 			$row = $res->fetch_assoc();
 			$_SESSION["user_logged"] = TRUE;
 			$_SESSION["user_id"] = $row[ "user_id" ];
+		} else {
+			$_SESSION["user_logged"] = FALSE;
+		 	setcookie("invalid_login_data", "1");
 		}
-		else $_SESSION["user_logged"] = FALSE;
 	}
 	$stmt->close();
 	$db->close();

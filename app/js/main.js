@@ -1,6 +1,6 @@
 var mail_regex = /[a-z0-9@._-]/i,
     login_regex = /[a-z0-9_]/i,
-    password_regex = /[a-z0-9!@#$%^&*()-_+=~`]/i
+    password_regex = /[a-z0-9!@#$%^&*()-_+=~]/i
 
 var user_id = (typeof session_user_id != "undefined") ? session_user_id : 0;
 
@@ -29,7 +29,7 @@ window.onload = function() {
     show_big_popup: false,
     show_placeholder: true,
     popup_msg: '',
-    messages: ['Żadne pole nie może pozostać puste.', 'To pole nie może pozostać puste.'],
+    messages: ['Żadne pole nie może pozostać puste.', 'To pole nie może pozostać puste.', 'Nieprawidłowa nazwa użytkownika lub hasło.', 'Wylogowanie przebiegło pomyślnie.'],
     notes: [],
     note_no: -1
   }
@@ -125,7 +125,7 @@ window.onload = function() {
     }, mounted: function() {
       Vue.http.post( "php_query.php", {action: 'get_notes', user_id: user_id}).then(response => {
         var arr = response.body;
-        if (arr.length > 0) {
+        if (arr !== '""' && arr.length > 0) {
           for (var k in arr) {
             globals.notes.push({
               id: arr[k].id,
@@ -222,6 +222,15 @@ window.onload = function() {
       mail: '',
       valid_mail: false,
       sign_up_success: false
+    },
+    mounted: function() {
+      if( typeof invalid_login_data != 'undefined' ) {
+        globals.popup_msg = globals.messages[2];
+        globals.show_popup = true;
+      } else if( typeof user_logged_out != 'undefined' ) {
+        globals.popup_msg = globals.messages[3];
+        globals.show_popup = true;
+      }
     },
     methods: {
       input_blur: function(e) {

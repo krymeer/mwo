@@ -31,7 +31,16 @@
       		include( "./registered.php" );
       	} else {
       		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/login.css\">";
-			include( "./login.php" );
+
+          if( $_COOKIE["invalid_login_data"] ) {
+            echo "<script type='text/javascript'>var invalid_login_data = true;</script>";
+            setcookie("invalid_login_data", "", time()-3600);
+          } else if( $_COOKIE["user_logged_out"] ) {
+            echo "<script type='text/javascript'>var user_logged_out = true;</script>";
+            setcookie("user_logged_out", "", time()-3600);
+          }
+
+          include( "./login.php" );
       	}
         echo "</body></html>";
         return;

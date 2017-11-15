@@ -6,12 +6,12 @@
 
 	$userName = $_POST[ "login" ];
 	$userPassword = $_POST[ "password" ];
-	$q = "SELECT * FROM users WHERE user_name = '". $userName ."' AND user_password = '". hash( "sha256", $userPassword ) ."'";
+	$q = "SELECT * FROM users WHERE user_name = ? AND user_password = ?";
 	$db = get_db();
-	//$db->set_charset('utf-8');
 	$arr = '';
 	
 	$stmt = $db->prepare( $q );
+  $stmt->bind_param('ss', $userName, hash( "sha256", $userPassword ));
 	$stmt->execute();
 	if ($res = $stmt->get_result()) {
 		if( $res->num_rows > 0 ) {

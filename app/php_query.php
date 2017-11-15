@@ -50,8 +50,6 @@
     $db->close();
   }
 
-  save_note(0, 6662, 'ddasad');
-
   function delete_note($user, $id) {
     echo $user.'<br>'.$id;
     $q = 'DELETE FROM notes WHERE user_id = ? AND msg_id = ?';

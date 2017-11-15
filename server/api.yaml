@@ -16,9 +16,18 @@ Resources:
         paths:
           "/todo":
             post:
+              consumes:
+              - "application/json"
               responses: {}
               x-amazon-apigateway-integration:
                 uri: "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:874845083551:function:TodoPostHandler/invocations"
+                passthroughBehavior: "when_no_templates"
+                httpMethod: "POST"
+                type: "aws_proxy"
+            get:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri: "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:874845083551:function:TodoGetHandler/invocations"
                 passthroughBehavior: "when_no_match"
                 httpMethod: "POST"
                 type: "aws_proxy"
@@ -30,103 +39,58 @@ Resources:
                 passthroughBehavior: "when_no_match"
                 httpMethod: "POST"
                 type: "aws_proxy"
-  ApiLambdaPostPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName:
-        Fn::GetAtt: [TodoPostHandler, Arn]
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn:
-        Fn::Join:
-          - ""
-          - - "arn:aws:execute-api:"
-            - Ref: AWS::Region
-            - ":"
-            - Ref: AWS::AccountId
-            - ":"
-            - Ref: TodoApi
-            - "/*/*/*"
-  ApiLambdaGetPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName:
-        Fn::GetAtt: [TodoGetHandler, Arn]
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn:
-        Fn::Join:
-          - ""
-          - - "arn:aws:execute-api:"
-            - Ref: AWS::Region
-            - ":"
-            - Ref: AWS::AccountId
-            - ":"
-            - Ref: TodoApi
-            - "/*/*/*"
+        definitions:
+          "todo":
+            type: object
+            properties:
+              ID:
+                type: string
+              UserID:
+                type: string
+              Content:
+                type: string
+              CreatedAt:
+                type: integer
+            required: ["UserID", "Content"]
+            additionalProperties: false
   TodoPostHandler:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: todo.post
+      Handler: post_todo.handler
       FunctionName: TodoPostHandler
       Runtime: nodejs6.10
       Events:
-        ApiRequest:
+        "NewTodo":
           Type: Api
           Properties:
             Path: /todo
             Method: post
-      Policies:
-        -
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action: cloudformation:DescribeStackResource
-              Resource:
-                Fn::Join:
-                  - ""
-                  - - "arn:aws:cloudformation:"
-                    - Ref: AWS::Region
-                    - ":"
-                    - Ref: AWS::AccountId
-                    - ":stack/mwo-todo/*"
-            - Effect: Allow
-              Action:
-                - "dynamodb:DeleteItem"
-                - "dynamodb:GetItem"
-                - "dynamodb:PutItem"
-                - "dynamodb:Query"
-                - "dynamodb:Scan"
-                - "dynamodb:UpdateItem"
-              Resource:
-                - Fn::Join:
-                  - ""
-                  - - "arn:aws:dynamodb:"
-                    - Ref: AWS::Region
-                    - ":"
-                    - Ref: AWS::AccountId
-                    - ":table/"
-                    - Ref: Todos
-                - Fn::Join:
-                  - ""
-                  - - "arn:aws:dynamodb:"
-                    - Ref: AWS::Region
-                    - ":"
-                    - Ref: AWS::AccountId
-                    - ":table/"
-                    - Ref: Users
+            RestApiId: !Ref TodoApi
+      Tags:
+        Application: mwo-todo
+      Role: !GetAtt TodoHandlerRole.Arn
   TodoGetHandler:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: todo.get
+      Handler: get_todo.handler
       FunctionName: TodoGetHandler
       Runtime: nodejs6.10
       Events:
-        ApiRequest:
+        TodoGetById:
           Type: Api
           Properties:
             Path: /todo/{id}
             Method: get
+            RestApiId: !Ref TodoApi
+        TodoGetAll:
+          Type: Api
+          Properties:
+            Path: /todo
+            Method: get
+            RestApiId: !Ref TodoApi
+      Tags:
+        Application: mwo-todo
+      Role: !GetAtt TodoHandlerRole.Arn
   Todos:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -136,7 +100,7 @@ Resources:
           AttributeType: "S"
         -
           AttributeName: "UserID"
-          AttributeType: "N"
+          AttributeType: "S"
       KeySchema:
         - AttributeName: "ID"
           KeyType: HASH
@@ -156,6 +120,9 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      Tags:
+        - Key: Application
+          Value: mwo-todo
   Users:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -169,3 +136,99 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      Tags:
+        - Key: Application
+          Value: mwo-todo
+  PostTodoLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt [TodoPostHandler, Arn]
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: TodoApi
+            - "/*/*/*"
+  GetTodoLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Fn::GetAtt: [TodoGetHandler, Arn]
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: TodoApi
+            - "/*/*/*"
+  TodoHandlerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: TodoHandlerRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+  TodoHandlersCommonPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: TodoHandlersCommonAccessPolicy
+      Roles:
+        - Ref: TodoHandlerRole
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: cloudformation:DescribeStackResource
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:cloudformation:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":stack/mwo-todo/*"
+          - Effect: Allow
+            Action:
+              - "dynamodb:DeleteItem"
+              - "dynamodb:GetItem"
+              - "dynamodb:PutItem"
+              - "dynamodb:Query"
+              - "dynamodb:Scan"
+              - "dynamodb:UpdateItem"
+            Resource:
+              - Fn::Join:
+                - ""
+                - - "arn:aws:dynamodb:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":table/"
+                  - Ref: Todos
+              - Fn::Join:
+                - ""
+                - - "arn:aws:dynamodb:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":table/"
+                  - Ref: Users

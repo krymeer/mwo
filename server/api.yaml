@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  TodoApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: TodoApi
+      StageName: v1
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          version: "1.0"
+          title: "mwo-todo"
+        schemes:
+        - "https"
+        paths:
+          "/todo":
+            post:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri: "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:874845083551:function:TodoPostHandler/invocations"
+                passthroughBehavior: "when_no_match"
+                httpMethod: "POST"
+                type: "aws_proxy"
+          /todo/{id}:
+            get:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri: "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:874845083551:function:TodoGetHandler/invocations"
+                passthroughBehavior: "when_no_match"
+                httpMethod: "POST"
+                type: "aws_proxy"
+  ApiLambdaPostPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Fn::GetAtt: [TodoPostHandler, Arn]
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: TodoApi
+            - "/*/*/*"
+  ApiLambdaGetPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Fn::GetAtt: [TodoGetHandler, Arn]
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: TodoApi
+            - "/*/*/*"
+  TodoPostHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: todo.post
+      FunctionName: TodoPostHandler
+      Runtime: nodejs6.10
+      Events:
+        ApiRequest:
+          Type: Api
+          Properties:
+            Path: /todo
+            Method: post
+      Policies:
+        -
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: cloudformation:DescribeStackResource
+              Resource:
+                Fn::Join:
+                  - ""
+                  - - "arn:aws:cloudformation:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":stack/mwo-todo/*"
+            - Effect: Allow
+              Action:
+                - "dynamodb:DeleteItem"
+                - "dynamodb:GetItem"
+                - "dynamodb:PutItem"
+                - "dynamodb:Query"
+                - "dynamodb:Scan"
+                - "dynamodb:UpdateItem"
+              Resource:
+                - Fn::Join:
+                  - ""
+                  - - "arn:aws:dynamodb:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":table/"
+                    - Ref: Todos
+                - Fn::Join:
+                  - ""
+                  - - "arn:aws:dynamodb:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":table/"
+                    - Ref: Users
+  TodoGetHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: todo.get
+      FunctionName: TodoGetHandler
+      Runtime: nodejs6.10
+      Events:
+        ApiRequest:
+          Type: Api
+          Properties:
+            Path: /todo/{id}
+            Method: get
+  Todos:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "ID"
+          AttributeType: "S"
+        -
+          AttributeName: "UserID"
+          AttributeType: "N"
+      KeySchema:
+        - AttributeName: "ID"
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: "UserIndex"
+          KeySchema:
+            - AttributeName: "UserID"
+              KeyType: HASH
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - "Content"
+              - "CreatedAt"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  Users:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "ID"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "ID"
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5

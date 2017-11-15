@@ -2,7 +2,7 @@ var mail_regex = /[a-z0-9@._-]/i,
     login_regex = /[a-z0-9_]/i,
     password_regex = /[a-z0-9!@#$%^&*()-_+=~`]/i
 
-var user_id = 0;
+var user_id = (typeof session_user_id != "undefined") ? session_user_id : 0;
 
 function handle_input(e, regex) {
   if (!regex.test(e.key)) {
@@ -61,7 +61,7 @@ window.onload = function() {
         var text = document.getElementById('note_contents').innerText;
         var note_id = globals.notes[globals.note_no].id;
         Vue.set(globals.notes, globals.note_no, {id: note_id, contents: text, show_deletion_bar: false});
-        Vue.http.post('/q.php', {action: 'save_note', contents: text, user_id: user_id, note_id: note_id});
+        Vue.http.post( "php_query.php", {action: "save_note", contents: text, user_id: user_id, note_id: note_id});
         globals.note_no = -1;
         globals.show_big_popup = false;
       },
@@ -123,7 +123,7 @@ window.onload = function() {
         }
       }
     }, mounted: function() {
-      Vue.http.post('/q.php', {action: 'get_notes', user_id: user_id}).then(response => {
+      Vue.http.post( "php_query.php", {action: 'get_notes', user_id: user_id}).then(response => {
         var arr = response.body;
         if (arr.length > 0) {
           for (var k in arr) {
@@ -166,7 +166,7 @@ window.onload = function() {
     props: ['materialIcon'],
     template: '\
       <header> \
-        <a class="block" href="index.html"> \
+        <a class="block" href="./"> \
           <h1>ToDoApp</h1> \
         </a> \
         <i v-show="materialIcon" class="material-icons" @click="click_icon">{{ materialIcon }}</i>\
@@ -175,7 +175,7 @@ window.onload = function() {
       click_icon: function() {
         var i_id = this._props.materialIcon;
         if (i_id === 'power_settings_new') {
-          window.location.href = "login.html?logout";
+          window.location.href = "./logout.php";
         }
       }
     }
@@ -264,8 +264,11 @@ window.onload = function() {
             }
           }
         } else {
+          document.getElementById("sign_up_form").submit();
+          /*
           globals.show_popup = false;
           this.sign_up_success = true;
+          */
         }
       },
       check_input: function() {
@@ -273,7 +276,8 @@ window.onload = function() {
           globals.popup_msg = globals.messages[0];
           globals.show_popup = true;
         } else {
-          window.location.href = 'index.html';
+          // window.location.href = 'index.html';
+          document.getElementById("login_form").submit();
         }
       },
       check_mail_for_pass: function() {
@@ -287,14 +291,15 @@ window.onload = function() {
       },
       add_note: function() {
       	var k = 0;
-        if( globals.notes.length > 0 ) globals.notes[ globals.notes.length - 1 ].id + 1;
+        if( globals.notes.length > 0 ) k = globals.notes[ globals.notes.length - 1 ].id + 1;
         // var k = globals.notes[ Math.max( 0, globals.notes.length - 1 ) ].id + 1;
         globals.notes.push({
           id: k,
           contents: '',
           show_deletion_bar: false
         });
-        Vue.http.post('/q.php', {action: 'add_note', user_id: user_id, note_id: k, date: get_date()});
+        var obj = {action: 'add_note', user_id: user_id, note_id: k, date: get_date()}
+        Vue.http.post( "php_query.php", obj);
       },
       add_first_note: function() {
         globals.no_notes = false;
@@ -307,7 +312,7 @@ window.onload = function() {
           if (globals.notes.length === 0) {
             globals.no_notes = true;
           }
-          Vue.http.post('/q.php', {action: 'delete_note', user_id: user_id, note_id: note_id});
+          Vue.http.post( "php_query.php", {action: 'delete_note', user_id: user_id, note_id: note_id});
         }
       },
       edit_note: function(k) {

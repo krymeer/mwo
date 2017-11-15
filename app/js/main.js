@@ -1,6 +1,6 @@
 var mail_regex = /[a-z0-9@._-]/i,
     login_regex = /[a-z0-9_]/i,
-    password_regex = /[a-z0-9!@#$%^&*()-_+=~]/i
+    password_regex = /[a-z0-9!@#$%^&*()\-_+=~]/i
 
 var user_id = (typeof session_user_id != "undefined") ? session_user_id : 0;
 

@@ -7,7 +7,7 @@
       <div>nazwa użytkownika</div>
       <input name="login" type="text" onkeypress="return handle_input(event, login_regex)" v-model="login" maxlength="24">
       <div>hasło</div>
-      <input name="password" type="password" onkeypress="return handle_input(event, password_regex)" v-model="password" maxlength="32">
+      <input name="password" type="password" onkeypress="return handle_input(event, password_regex)" @keyup.enter="check_input" v-model="password" maxlength="32">
       <a class="block font_small" href="lost_pass.html">zapomniałem hasła</a>
       <input type="submit">
       <button @click="check_input">zaloguj się</button>

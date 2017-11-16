@@ -50,13 +50,18 @@ window.onload = function() {
         </div> \
         <div class="contents_wrapper"> \
           <div id="note_placeholder" v-show="show_placeholder">Tu wpisz swoją notatkę...</div> \
-          <div contentEditable="true" v-on:keyup="handle_note_text" class="contents" id="note_contents" v-if="notes.length > 0 && note_no > -1"> \
+          <div contentEditable="true" v-on:paste="remove_styling" v-on:keyup="handle_note_text" class="contents" id="note_contents" v-if="notes.length > 0 && note_no > -1"> \
             {{ notes[note_no].contents }} \
           </div> \
         </div> \
         <button class="save" @click="save_note">zapisz</button> \
       </div>',
     methods: {
+      remove_styling: function(event) {
+        event.preventDefault();
+        var data = (event.clipboardData || window.clipboardData).getData('text').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        document.execCommand('insertHTML', false, data);
+      },
       save_note: function() {
         var text = document.getElementById('note_contents').innerText;
         var note_id = globals.notes[globals.note_no].id;
@@ -72,9 +77,10 @@ window.onload = function() {
         } else {
           globals.show_placeholder = true;
         }
+        /*
         if (event.keyCode === 13) {
           return event.preventDefault();
-        }
+        }*/
       }
     },
     data: function() {

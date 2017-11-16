@@ -97,7 +97,7 @@ window.onload = function() {
   Vue.component('list-of-notes', {
     template: '\
       <div v-show="!no_notes" class="grid" id="grid_of_notes"> \
-        <div class="note" v-for="(note, index) in notes"> \
+        <div class="note" v-for="(note, index) in notes" v-bind:class="{ no_hover: show_big_popup }"> \
           <div class="deletion_bar" v-show="note.show_deletion_bar"><span>usunąć?</span> \
             <i class="material-icons" @click="delete_note(index)">check</i> <i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">close</i>  \
           </div> \

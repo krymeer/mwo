@@ -38,7 +38,7 @@ body {
   background: linear-gradient(rgba(246, 246, 246, 0), rgba(246, 246, 246, .95));
 }
 
-.note:hover {
+.note:not(.no_hover):hover {
   border-color: #b90504;
 }
 

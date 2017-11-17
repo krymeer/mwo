@@ -145,7 +145,7 @@ span.tooltip > span.hidden {
   border-radius: 4px;
   top: 40px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   box-shadow: 1px 1px 3px #333;
   grid-template-columns: auto;
   grid-column-gap: .25rem;
@@ -187,7 +187,7 @@ span.tooltip > span.hidden {
 }
 
 .contents_wrapper > .contents {
-	height: 19px;
+	min-height: 19px;
 }
 
 .popup.big_popup  div[contentEditable="true"]:focus {

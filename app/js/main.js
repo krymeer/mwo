@@ -50,13 +50,18 @@ window.onload = function() {
         </div> \
         <div class="contents_wrapper"> \
           <div id="note_placeholder" v-show="show_placeholder">Tu wpisz swoją notatkę...</div> \
-          <div contentEditable="true" v-on:keyup="handle_note_text" class="contents" id="note_contents" v-if="notes.length > 0 && note_no > -1"> \
+          <div contentEditable="true" v-on:paste="remove_styling" v-on:keyup="handle_note_text" class="contents" id="note_contents" v-if="notes.length > 0 && note_no > -1"> \
             {{ notes[note_no].contents }} \
           </div> \
         </div> \
         <button class="save" @click="save_note">zapisz</button> \
       </div>',
     methods: {
+      remove_styling: function(event) {
+        event.preventDefault();
+        var data = (event.clipboardData || window.clipboardData).getData('text').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        document.execCommand('insertHTML', false, data);
+      },
       save_note: function() {
         var text = document.getElementById('note_contents').innerText;
         var note_id = globals.notes[globals.note_no].id;
@@ -72,9 +77,10 @@ window.onload = function() {
         } else {
           globals.show_placeholder = true;
         }
+        /*
         if (event.keyCode === 13) {
           return event.preventDefault();
-        }
+        }*/
       }
     },
     data: function() {
@@ -97,7 +103,7 @@ window.onload = function() {
   Vue.component('list-of-notes', {
     template: '\
       <div v-show="!no_notes" class="grid" id="grid_of_notes"> \
-        <div class="note" v-for="(note, index) in notes"> \
+        <div class="note" v-for="(note, index) in notes" v-bind:class="{ no_hover: show_big_popup }"> \
           <div class="deletion_bar" v-show="note.show_deletion_bar"><span>usunąć?</span> \
             <i class="material-icons" @click="delete_note(index)">check</i> <i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">close</i>  \
           </div> \

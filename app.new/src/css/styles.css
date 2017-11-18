@@ -136,31 +136,6 @@ span.tooltip > span.hidden {
   font-weight: bold;  
 }
 
-.popup {
-  display: grid;
-  position: fixed;
-  background: #f7b538;
-  color: #333;
-  padding: .5rem;
-  border-radius: 4px;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  box-shadow: 1px 1px 3px #333;
-  grid-template-columns: auto;
-  grid-column-gap: .25rem;
-  align-items: center;
-}
-
-.popup i {
-  cursor: pointer;
-  justify-self: end;
-}
-
-.popup i:hover {
-  color: #b90504;
-}
-
 .popup.big_popup {
   top: calc(80px + 1rem);
   background: #e8e8e8;

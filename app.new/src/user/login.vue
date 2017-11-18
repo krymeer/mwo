@@ -1,15 +1,19 @@
 <template>
-  <div class="grid" id="page_contents">
-    <div class="login-signin">
+  <div id="page_contents">
+    <div class="login-signin grid">
       <h2>zaloguj się</h2>
-      <div>nazwa użytkownika</div>
-      <input name="login" type="text" v-model="login" :class="{error: loginInvalid}" maxlength="24">
-      <div>hasło</div>
-      <input name="password" type="password" :class="{error: passwordInvalid}" v-model="password" maxlength="32">
-      <a class="block font_small" href="lost_pass.html">zapomniałem hasła</a>
-      <button @click="signin" :enabled="isValid">zaloguj się</button>
-      <span class="font_small">nie masz konta?</span><br>
-      <!-- <a class="font_large" :click="toggle">zarejestruj się</a> -->
+      <div id="login_form" class="grid">
+        <div>nazwa użytkownika</div>
+        <input name="login" type="text" v-model="login" :class="{error: loginInvalid}" maxlength="24">
+        <div>hasło</div>
+        <input name="password" type="password" :class="{error: passwordInvalid}" v-model="password" maxlength="32">
+        <!--<a class="block font_small" href="lost_pass.html">zapomniałem hasła</a>-->
+        <button @click="signin" :enabled="isValid">zaloguj się</button>
+      </div> 
+      <!--<div id="wanna_sign_up">
+        <span class="font_small">nie masz konta?</span><br>
+        <a id="sign_up" class="font_large" :click="toggle">zarejestruj się</a>
+      </div>-->
     </div>
     <div class="login-signup">
       

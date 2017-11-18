@@ -1,13 +1,17 @@
+
+
 #login_form {
   grid-template-columns: auto 1fr;
   grid-row-gap: 1rem;
   justify-items: start;
   align-items: center;
+  grid-column: 1 / 2;
 }
 
 #login_form button {
   margin-right: 1rem;
   justify-self: end;
+  grid-column: 2;
 }
 
 #login_form input[type="submit"] {
@@ -21,8 +25,14 @@
   margin: 0 1rem;
 }
 
-#sign_up {
+#wanna_sign_up {
   text-align: right;
+}
+
+@media screen and (max-width: 767px) {
+  #wanna_sign_up {
+    margin: 1.5rem 1rem 0 0;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -30,14 +40,12 @@
     grid-template-columns:  1fr 1fr;
   }
 
-  #sign_up {
+  #wanna_sign_up {
     grid-column: 2;
     grid-row: 1;
   }
-}
-
-@media screen and (max-width: 767px) {
-  #sign_up {
-    margin: 1.5rem 1rem 0 0;
+ 
+  .login-signin.grid {
+    grid-template-columns: 1fr 1fr;
   }
 }

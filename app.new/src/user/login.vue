@@ -22,13 +22,20 @@
 export default {
   data: function() {
     return {
-      login: "",
-      password: ""
+      login: '',
+      password: ''
     };
   },
   methods: {
     signin: function() {},
-    check_input: function() {}
+    check_input: function() {
+      if (this.login === '' || this.password === '') {
+        this.$parent.showPopup = true;
+        this.$parent.popupMessage = this.$parent.listOfMessages[0];
+      } else {
+        document.getElementById('login_form').submit();
+      }
+    }
   }
 };
 </script>

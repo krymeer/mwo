@@ -1,37 +1,71 @@
 <template>
   <div class="grid" id="page_contents">
-    <h2>zaloguj się</h2>
-    <form action="loginexe.php" method="POST" class="grid" id="login_form" @submit.prevent>
+    <div class="login-signin">
+      <h2>zaloguj się</h2>
       <div>nazwa użytkownika</div>
-      <input name="login" type="text" @keyup.enter="check_input" v-model="login" maxlength="24">
+      <input name="login" type="text" v-model="login" :class="{error: loginInvalid}" maxlength="24">
       <div>hasło</div>
-      <input name="password" type="password" @keyup.enter="check_input" v-model="password" maxlength="32">
+      <input name="password" type="password" :class="{error: passwordInvalid}" v-model="password" maxlength="32">
       <a class="block font_small" href="lost_pass.html">zapomniałem hasła</a>
-      <input type="submit">
-      <button @click="check_input">zaloguj się</button>
-    </form>
-    <div id="sign_up">
+      <button @click="signin" :enabled="isValid">zaloguj się</button>
       <span class="font_small">nie masz konta?</span><br>
-      <a class="font_large" href="sign_up.html">zarejestruj się</a>
+      <a class="font_large" :click="toggle">zarejestruj się</a>
+    </div>
+    <div class="login-signup">
+      
     </div>
   </div>
+  
 </template>
 
 <script>
-auth = require("./auth");
+import auth from "./auth";
+import EventBus from "../eventBus";
+window.auth = auth;
 export default {
   data: function() {
     return {
-      login: "",
-      password: ""
+      login: undefined,
+      password: undefined,
+      token: {},
+      activeTab: "login"
     };
   },
+  computed: {
+    loginInvalid() {
+      return typeof this.login !== "undefined" && !this.login;
+    },
+    passwordInvalid() {
+      return typeof this.password !== "undefined" && !this.password;
+    },
+    isValid() {
+      return !(this.loginInvalid && this.passwordInvalid);
+    }
+  },
   methods: {
-    signin: 
+    signin: function() {
+      auth.signIn(this.login, this.password).then(
+        session => {
+          EventBus.$emit("login-success", session.idToken);
+        },
+        err => {
+          this.status = { error: true, details: err };
+        }
+      );
+    },
+    signup: function() {
+      auth.signUp(this.login, this.password, this.email).then(user => {});
+    }
   }
 };
 </script>
 
 <style>
-
+.error {
+  border-color: red;
+}
+.login-signin {
+  display: flex;
+  flex-direction: column
+}
 </style>

@@ -8,7 +8,7 @@
         <div>hasło</div>
         <input name="password" type="password" :class="{error: passwordInvalid}" v-model="password" maxlength="32">
         <!--<a class="block font_small" href="lost_pass.html">zapomniałem hasła</a>-->
-        <button @click="signin" :enabled="isValid">zaloguj się</button>
+        <button @click="signin">zaloguj się</button>
       </div> 
       <!--<div id="wanna_sign_up">
         <span class="font_small">nie masz konta?</span><br>
@@ -37,17 +37,20 @@ export default {
   },
   computed: {
     loginInvalid() {
-      return typeof this.login !== "undefined" && !this.login;
+      return typeof this.login === "undefined" && !this.login;
     },
     passwordInvalid() {
-      return typeof this.password !== "undefined" && !this.password;
+      return typeof this.password === "undefined" && !this.password;
     },
     isValid() {
-      return !(this.loginInvalid && this.passwordInvalid);
+      return !this.loginInvalid && !this.passwordInvalid;
     }
   },
   methods: {
     signin: function() {
+      if (!this.isValid) {
+        return;
+      }
       auth.signIn(this.login, this.password).then(
         session => {
           EventBus.$emit("login-success", session.idToken);

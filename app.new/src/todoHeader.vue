@@ -3,7 +3,7 @@
     <a class="block" href="./">
       <h1>ToDoApp</h1>
     </a>
-    <i v-show="materialIcon" class="material-icons" @click="click_icon">{{ materialIcon }}</i>
+    <i v-show="materialIcon" class="material-icons" @click="clickIcon">{{ materialIcon }}</i>
   </header>
 </template>
 
@@ -16,7 +16,7 @@
       }
     },
     methods: {
-      click_icon: function() {
+      clickIcon: function() {
         var i_id = this._props.materialIcon;
         if (i_id === 'power_settings_new') {
           window.location.href = "./logout.php";

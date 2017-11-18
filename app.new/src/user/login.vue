@@ -9,7 +9,7 @@
       <a class="block font_small" href="lost_pass.html">zapomniałem hasła</a>
       <button @click="signin" :enabled="isValid">zaloguj się</button>
       <span class="font_small">nie masz konta?</span><br>
-      <a class="font_large" :click="toggle">zarejestruj się</a>
+      <!-- <a class="font_large" :click="toggle">zarejestruj się</a> -->
     </div>
     <div class="login-signup">
       

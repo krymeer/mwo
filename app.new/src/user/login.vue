@@ -60,12 +60,4 @@ export default {
 };
 </script>
 
-<style>
-.error {
-  border-color: red;
-}
-.login-signin {
-  display: flex;
-  flex-direction: column
-}
-</style>
+<style src="./../css/login.css"></style>

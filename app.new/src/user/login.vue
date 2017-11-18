@@ -18,7 +18,7 @@
 </template>
 
 <script>
-auth = require("./auth");
+//auth = require("./auth");
 export default {
   data: function() {
     return {
@@ -27,11 +27,10 @@ export default {
     };
   },
   methods: {
-    signin: 
+    signin: function() {},
+    check_input: function() {}
   }
 };
 </script>
 
-<style>
-
-</style>
+<style src="./../css/login.css"></style>

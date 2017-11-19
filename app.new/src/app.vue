@@ -1,6 +1,7 @@
 <template>
  <div id="main_container" class="grid">
-    <popup :ifShowPopup="showPopup" :n="messageNumber"></popup>
+    <!-- <popup :ifShowPopup="showPopup" :n="messageNumber"></popup> -->
+    <popup></popup>
     <notePopup :ifShowNotePopup="showNotePopup" :contents="noteContents"></notePopup>
     <todoHeader></todoHeader>
     <login></login>
@@ -26,9 +27,7 @@ export default {
     return {
 			token: undefined,
       noteContents: '',
-      showNotePopup: false,
-      showPopup: false,
-      messageNumber: -1
+      showNotePopup: false
     };
   },
   components: {

@@ -123,11 +123,12 @@ export default {
         err => {
           console.error(err);
           this.status = { error: true, details: err };
-          this.$parent.showPopup = true;
-          this.$parent.messageNumber = 2;
+          EventBus.$emit("show-popup", 2);
+          // this.$parent.showPopup = true;
+          // this.$parent.messageNumber = 2;
         }
       );
-    },
+    },  
     signup: function() {
       console.debug("[login:signup] called");
       auth.signUp(this.login, this.password, this.email).then(

@@ -36,6 +36,14 @@ button.btn-action {
   padding: .5rem;
   grid-column: 2;
   justify-self: end;
+  border: 1px solid transparent;
+}
+
+button.btn-action[disabled] {
+  background: #f6f6f6;
+  color: #333;
+  border-color: #333;
+  cursor: default;
 }
 
 @media screen and (max-width: 767px) {

@@ -1,18 +1,19 @@
 <template>
-	    <i class="material-icons" v-show="!no_notes && !show_big_popup" @click="add_note" id="add_note">note_add</i>
+	    <i class="material-icons" v-show="!no_notes" @click="add_note" id="add_note">note_add</i>
 </template>
 
 <script>
-	import app from './app.vue'
+	import EventBus from './eventBus.js'
 	export default {
-		data: function() {
-			return globals;
+		computed: {
+			no_notes: function() {
+				return false;
+			}
 		},
 		methods: {
-			add_note: {
-				function() {
-					app.add_note();
-				}
+			add_note: function() {
+				EventBus.$emit( "show-popup", 2 );
+				return true;
 			}
 		}
 	}

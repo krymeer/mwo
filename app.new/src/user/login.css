@@ -1,0 +1,48 @@
+.login-form {
+  display: grid;
+  grid-template-columns: auto;
+  grid-row-gap: .5rem;
+  /* justify-items: start; */
+  align-items: center;
+}
+
+.login-form input {
+  width: 100%;
+  font-size: 17px;
+  padding: .25rem;
+  /* margin: 0 1rem; */
+}
+
+.login-form > .form-field {
+  grid-column: 1 / span 2;
+}
+
+.btn-action  {
+  grid-column: 2;
+  padding: .5rem 0;
+}
+
+.btn-toggle {
+  grid-column: 2; 
+  justify-self: end;
+}
+#sign_up {
+  text-align: right;
+}
+
+@media screen and (min-width: 768px) {
+  #page_contents {
+    grid-template-columns:  1fr 1fr;
+  }
+
+  #sign_up {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #sign_up {
+    margin: 1.5rem 1rem 0 0;
+  }
+}

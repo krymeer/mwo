@@ -13,6 +13,11 @@ const promiseCallback = (resolve, reject) => (err, result) => {
     }
     resolve(result)
 }
+
+function promisify(f) {
+    return  f(args, callback)
+}
+
 const signUp = (username, password, email) => {
     let attributes = [
         new CognitoUserAttribute({ Name: 'email', Value: email })

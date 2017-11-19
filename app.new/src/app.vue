@@ -14,6 +14,7 @@ import todoHeader from './todoHeader.vue'
 import todoFooter from './todoFooter.vue'
 import notePopup from './notePopup.vue'
 import popup from './popup.vue'
+import EventBus from './eventBus'
 export default {
 	created: function() {
     EventBus.$on("login-success", token => {

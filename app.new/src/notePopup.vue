@@ -19,6 +19,7 @@
 </template>
 
 <script>
+  import './css/notePopup.css'
   export default {
     mounted: function() {
       if (this.contents.replace(/ /g, '').length > 0) {

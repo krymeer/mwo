@@ -137,44 +137,6 @@ span.tooltip > span.hidden {
   font-weight: bold;  
 }
 
-.popup.big_popup {
-  top: calc(80px + 1rem);
-  background: #e8e8e8;
-  width: 60%;
-  max-width: 600px;
-  z-index: 1;
-  padding: 0;
-  grid-template-columns: auto;
-  grid-template-rows: auto 1fr auto;
-}
-
-.popup.big_popup > .header,
-.popup.big_popup > .contents_wrapper {
-  padding: .5rem;
-}
-
-.popup.big_popup > .header  {
-  background: #f7b538;
-}
-
-.popup.big_popup > .contents_wrapper {
-  text-align: justify;
-  align-self: start;
-}
-
-.contents_wrapper > .contents {
-	min-height: 19px;
-}
-
-.popup.big_popup  div[contentEditable="true"]:focus {
-  outline: none;
-}
-
-.popup.big_popup > button.save {
-  justify-self: center;
-  margin: .5rem 0;
-}
-
 .position_absolute {
   position: absolute;
 }

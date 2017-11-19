@@ -1,5 +1,5 @@
 <template>
-  <div class="popup big_popup" v-show="ifShowNotePopup">
+  <div class="popup big_popup" v-show="showNotePopup">
     <div class="header grid grid_horizontal">
       <h2>Edytuj notatkę</h2>
       <i class="material-icons" @click="hideNotePopup">close</i>
@@ -7,7 +7,7 @@
     <div class="contents_wrapper">
       <div id="note_placeholder" v-show="showPlaceholder">Tu wpisz swoją notatkę...</div>
       <div contentEditable="true" v-on:paste="removeStyling" v-on:keyup="handleNoteText" class="contents" id="note_contents">
-        {{ contents }}
+        {{ noteContents }}
       </div>
       <!--
         Previously there was a conditional rendering:
@@ -20,25 +20,25 @@
 
 <script>
   import './css/notePopup.css'
+  import EventBus from "./eventBus";
   export default {
-    mounted: function() {
-      if (this.contents.replace(/ /g, '').length > 0) {
-        this.showPlaceholder = false;
-      }
+    created: function() {
+      EventBus.$on("edit-note", (noteContents, noteId) => {
+        this.noteContents = noteContents;
+        this.noteId = noteId;
+        console.log(this.noteId);
+        this.showNotePopup = true;
+        if (this.noteContents.replace(/ /g, '').length > 0) {
+          this.showPlaceholder = false;
+        }
+      });
     },
     data: function() {
       return {
-        showPlaceholder: true
-      }
-    },
-    props: {
-      contents: {
-        type: String,
-        default: ''
-      },
-      ifShowNotePopup: {
-        type: Boolean,
-        default: false
+        showNotePopup: false,
+        showPlaceholder: true,
+        noteContents: '',
+        noteId: -1
       }
     },
     methods: {

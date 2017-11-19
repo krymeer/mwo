@@ -1,8 +1,11 @@
+.login-signin {
+  grid-template-columns: 1fr 1fr;
+}
+
 .login-form {
   display: grid;
-  grid-template-columns: auto;
   grid-row-gap: .5rem;
-  /* justify-items: start; */
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   grid-column: 1 / 2;
 }
@@ -11,43 +14,32 @@
   width: 100%;
   font-size: 17px;
   padding: .25rem;
-  /* margin: 0 1rem; */
 }
 
 .login-form > .form-field {
   grid-column: 1 / span 2;
 }
 
-.btn-action  {
-  grid-column: 2;
-  padding: .5rem 0;
+a#resetPassBtn {
+  grid-column: 1;
+  align-self: end;
 }
 
-.btn-toggle {
-  grid-column: 2; 
+a.btn-toggle {
+  align-self: start;
   justify-self: end;
-}
-#sign_up {
   text-align: right;
+  grid-column: 2;
+}
+
+button.btn-action {
+  padding: .5rem;
+  grid-column: 2;
+  justify-self: end;
 }
 
 @media screen and (max-width: 767px) {
-  #wanna_sign_up {
-    margin: 1.5rem 1rem 0 0;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  #page_contents {
-    grid-template-columns:  1fr 1fr;
-  }
-
-  #wanna_sign_up {
-    grid-column: 2;
-    grid-row: 1;
-  }
- 
-  .login-signin.grid {
-    grid-template-columns: 1fr 1fr;
+  .login-form {
+    grid-column: span 2;
   }
 }

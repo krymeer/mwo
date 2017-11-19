@@ -1,8 +1,9 @@
 <template>
   <div class="grid" id="page_contents">
-    <div class="login-signin">
+    <div class="login-signin grid">
       <h2>{{activeTab.actionLabel}}</h2>
-      <form class="login-form">
+      <a class="btn-toggle" @click="setTab(activeTab.toggleTarget())"><span v-if="activeTab.toggleLabel" class="font_small block">{{activeTab.toggleLabel}}</span> <span class="font_large">{{activeTab.toggleAction}}</span></a>
+      <form class="login-form" :class="activeTab.name">
         <div v-if="showEmailField" class="form-field">
           <label for="input-email">email</label>
           <input type="email" id="input-email" :class="{error: !emailValid}" v-model="email" />
@@ -15,9 +16,9 @@
           <label for="input-password">hasło</label>
           <input type="password" id="input-password" :class="{error: !passwordValid}" v-model="password" maxlength="32" />
         </div>
-        <a v-if="showResetPassLink" @click="setTab(Tab.RESET_PASS)" class="block">nie pamiętam hasła</a>
+        <div class="spacer_zero span_2"></div>
+        <a id="resetPassBtn" v-if="showResetPassLink" @click="setTab(Tab.RESET_PASS)" class="fblock">nie pamiętam hasła</a>
         <button class="block btn-action" @click="activeTab.action()" :disabled="!isValid" type="button">{{activeTab.actionLabel}}</button>
-        <a class="btn-toggle" @click="setTab(activeTab.toggleTarget())">{{activeTab.toggleLabel}} {{activeTab.toggleAction}}</a>
       </form>
     </div>
   </div>
@@ -31,9 +32,9 @@ import "./login.css";
 const Tab = {
   LOGIN: {
     name: "login",
-    actionLabel: "Zaloguj się",
-    toggleLabel: "Nie masz konta?",
-    toggleAction: "Zarejestruj się",
+    actionLabel: "zaloguj się",
+    toggleLabel: "nie masz konta?",
+    toggleAction: "zarejestruj się",
     toggleTarget: () => Tab.REGISTER,
     action: function() {
       console.debug("[login:Tab:LOGIN:action]");
@@ -42,9 +43,9 @@ const Tab = {
   },
   REGISTER: {
     name: "register",
-    actionLabel: "Zarejestruj się",
-    toggleLabel: "Masz już konto?",
-    toggleAction: "Zaloguj się",
+    actionLabel: "zarejestruj się",
+    toggleLabel: "masz już konto?",
+    toggleAction: "zaloguj się",
     toggleTarget: () => Tab.LOGIN,
     action: function() {
       console.debug("[login:Tab:REGISTER:action");
@@ -53,9 +54,9 @@ const Tab = {
   },
   RESET_PASS: {
     name: "reset-pass",
-    actionLabel: "Zresetuj hasło",
+    actionLabel: "zresetuj hasło",
     toggleLabel: "",
-    toggleAction: "Wróć",
+    toggleAction: "wróć",
     toggleTarget: () => Tab.LOGIN,
     action: function() {
       console.debug("[login:Tab:RESET_PASS:action]");
@@ -122,6 +123,8 @@ export default {
         err => {
           console.error(err);
           this.status = { error: true, details: err };
+          this.$parent.showPopup = true;
+          this.$parent.messageNumber = 2;
         }
       );
     },

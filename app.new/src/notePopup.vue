@@ -6,9 +6,7 @@
     </div>
     <div class="contents_wrapper">
       <div id="note_placeholder" v-show="showPlaceholder">Tu wpisz swoją notatkę...</div>
-      <div contentEditable="true" v-on:paste="removeStyling" v-on:keyup="handleNoteText" class="contents" id="note_contents">
-        {{ noteContents }}
-      </div>
+      <div contentEditable="true" @keydown="handleKeyPressed" @keyup.esc="hideNotePopup" v-on:paste="removeStyling" @keyup="handleNoteText" class="contents" id="note_contents">{{ noteContents }}</div>
       <!--
         Previously there was a conditional rendering:
           v-if="notes.length > 0 && note_no > -1"
@@ -26,7 +24,6 @@
       EventBus.$on("edit-note", (noteContents, noteId) => {
         this.noteContents = noteContents;
         this.noteId = noteId;
-        console.log(this.noteId);
         this.showNotePopup = true;
         if (this.noteContents.replace(/ /g, '').length > 0) {
           this.showPlaceholder = false;
@@ -38,10 +35,18 @@
         showNotePopup: false,
         showPlaceholder: true,
         noteContents: '',
-        noteId: -1
+        noteId: -1,
+        previousKey: -1
       }
     },
     methods: {
+      handleKeyPressed: function(event) {
+        // Hitting Ctrl+Enter causes saving contents of the note
+        if (this.previousKey === 17 && event.keyCode === 13) {
+          this.saveNote();
+        }
+        this.previousKey = event.keyCode;
+      },
       handleNoteText: function(event) {
         var text = event.target.innerText.trim();
         if (text.length > 0) {
@@ -49,11 +54,6 @@
         } else {
           this.showPlaceholder = true;
         }
-        /*
-        if (event.keyCode === 13) {
-          return event.preventDefault();
-        }
-        */
       },
       removeStyling: function(event) {
         event.preventDefault();
@@ -61,8 +61,6 @@
         document.execCommand('insertHTML', false, data);        
       },
       saveNote: function() {
-        // TODO
-
         /*
           Previous version
 
@@ -74,9 +72,20 @@
           globals.note_no = -1;
           globals.show_big_popup = false;
         */
+
+        var updatedContents = document.getElementById('note_contents').innerText;
+        updatedContents = updatedContents.replace(/\n$/, '').replace(/\n/g, '<br>')
+
+        /*
+          Here we ought to send a pair (this.noteId, updatedContents) to:
+          - the database,
+          - the listOfNotes component (?) ‒ so as tu update contents of the modified note.
+        */
+
+        this.hideNotePopup();
       },
       hideNotePopup: function() {
-        this.$parent.showNotePopup = !this.$parent.showNotePopup;
+        this.showNotePopup = !this.showNotePopup;
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
  <div id="main_container" class="grid">
-    <popup :ifShowPopup="showPopup" :message="popupMessage"></popup>
+    <popup :ifShowPopup="showPopup" :n="messageNumber"></popup>
     <notePopup :ifShowNotePopup="showNotePopup" :contents="noteContents"></notePopup>
     <todoHeader></todoHeader>
     <login></login>
@@ -28,8 +28,7 @@ export default {
       noteContents: '',
       showNotePopup: false,
       showPopup: false,
-      popupMessage: '',
-      listOfMessages: ['Żadne pole nie może pozostać puste.', 'To pole nie może pozostać puste.', 'Nieprawidłowa nazwa użytkownika lub hasło.', 'Wylogowanie przebiegło pomyślnie.']
+      messageNumber: -1
     };
   },
   components: {

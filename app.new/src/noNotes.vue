@@ -6,6 +6,8 @@
 </template>
 
 <script>
+	import './css/index.css'
+	import './css/styles.css'
 	import auth from './user/auth'
 	export default {
 		computed: {

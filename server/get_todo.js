@@ -6,15 +6,32 @@ const dynamo = common.dynamo();
 
 exports.handler = (event, context, callback) => {
     console.log('Received GET event:', JSON.stringify(event, null, 2));
-    common.getTableName('Todos')
+    
+    if(event.resource == "/todo/{id}"){
+        common.getTableName('Todos')
         .then(actualName => {
             return dynamo.scan({
                 TableName: actualName,
                 Index: 'UserIndex',
-                FilterExpression: 'UserID = :user_id',
-                ExpressionAttributeValues: {':user_id': 'test1234'} // use logged in user's id
+                FilterExpression: 'ID = :id',
+                ExpressionAttributeValues: {':id': event.pathParameters.id}
             }).promise()
         })
         .then(data => callback(null, common.makeResponse(null, data)))
         .catch(error => callback(null, common.makeResponse(error, null)))
+    } else {
+        common.getTableName('Todos')
+        .then(actualName => {
+            return dynamo.scan({
+                TableName: actualName,
+                Index: 'UserIndex',
+                //FilterExpression: 'UserID = :user_id',
+                //ExpressionAttributeValues: {':user_id': 'test1234'} // use logged in user's id
+                Limit: 10
+            }).promise()
+        })
+        .then(data => callback(null, common.makeResponse(null, data)))
+        .catch(error => callback(null, common.makeResponse(error, null)))
+    }
+    
 }

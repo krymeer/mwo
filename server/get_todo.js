@@ -25,9 +25,8 @@ exports.handler = (event, context, callback) => {
             return dynamo.scan({
                 TableName: actualName,
                 Index: 'UserIndex',
-                //FilterExpression: 'UserID = :user_id',
-                //ExpressionAttributeValues: {':user_id': 'test1234'} // use logged in user's id
-                Limit: 10
+                FilterExpression: 'UserID = :user_id',
+                ExpressionAttributeValues: {':user_id': event.requestContext.authorizer.claims.sub}
             }).promise()
         })
         .then(data => callback(null, common.makeResponse(null, data)))

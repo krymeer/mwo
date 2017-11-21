@@ -232,7 +232,7 @@ header i.material-icons:hover {
   position: relative;
 }
 
-#page_contents h2 {
+#page_contents h2.page_name {
   color: #333;
   padding-bottom: 1rem;
 }

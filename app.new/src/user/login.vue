@@ -1,7 +1,7 @@
 <template>
   <div class="grid" id="page_contents">
     <div class="login-signin grid">
-      <h2>{{activeTab.actionLabel}}</h2>
+      <h2 class="page_name">{{activeTab.actionLabel}}</h2>
       <a class="btn-toggle" @click="setTab(activeTab.toggleTarget())"><span v-if="activeTab.toggleLabel" class="font_small block">{{activeTab.toggleLabel}}</span> <span class="font_large">{{activeTab.toggleAction}}</span></a>
       <form class="login-form" :class="activeTab.name">
         <div v-if="showEmailField" class="form-field">

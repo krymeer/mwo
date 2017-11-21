@@ -112,33 +112,9 @@ body {
   color: #b90504;
 }
 
-#grid_of_notes {
-  margin: 1rem 0;
-  grid-gap: 1rem;
-  justify-content: start;
-  justify-self: center;
-}
 
 #note_placeholder {
   position: absolute;
   opacity: .5;
   z-index: -1;
-}
-
-@media screen and (min-width: 480px) {
-  #grid_of_notes {
-    grid-template-columns: auto auto;
-  }
-}
-
-@media screen and (min-width: 721px) {
-  #grid_of_notes {
-    grid-template-columns: auto auto auto;
-  }
-}
-
-@media screen and (min-width: 960px) {
-  #grid_of_notes {
-    grid-template-columns: auto auto auto auto;
-  }
 }

@@ -6,32 +6,53 @@
 </template>
 
 <script>
-	import './css/index.css'
-	import './css/styles.css'
+	import './css/tooltip.css'
 	export default {
+		props: {
+			hiddenContents: {
+				type: String,
+				default: ''
+			},
+			contents: {
+				type: String,
+				default: ''
+			}
+		},
 		methods: {
 			mouse_over: function( e ) {
-				var tooltip_contents = e.target.parentElement.childNodes[0];
-				tooltip_contents.style.display = 'block';
+        var parent            = e.target.parentElement,
+        		parent_rect				= parent.getBoundingClientRect(),
+            parent_t          = parent.offsetTop,
+            parent_l          = parent.offsetLeft,
+            tooltip_contents  = e.target.previousElementSibling;
 
-				var parent = e.target.parentElement,
-					top = parent.offsetTop,
-					left = parent.offsetLeft,
-					h = tooltip_contents.offsetHeight,
-					w = tooltip_contents.offsetWidth;
-				tooltip_contents.style.top = (top-h)+'px';
-				tooltip_contents.style.left = left+'px';
-				tooltip_contents.style.right = '';
+        tooltip_contents.style.display = 'block';
 
-				if( parent.parentElement.offsetWidth-left < w ) {
-					tooltip_contents.style.left = '';
-					tooltip_contents.style.right = '0px';
-				}
+        var tooltip_h     	= tooltip_contents.offsetHeight,
+            tooltip_w     	= tooltip_contents.offsetWidth,
+            tooltip_top   	= (parent_t - tooltip_h) + 'px',
+            tooltip_left  	= parent_l + 'px',
+            tooltip_right		= '',
+            tooltip_bottom	= '';
+
+        if (parent_rect.left + tooltip_w >= window.innerWidth) {
+          tooltip_left = '';
+          tooltip_right = '0px';
+        }
+
+        if (parent_rect.top - tooltip_h <= 0) {
+          tooltip_bottom = '';
+          tooltip_top = (parent_t + tooltip_h) + 'px';
+        }
+
+        tooltip_contents.style.top = tooltip_top;
+        tooltip_contents.style.left = tooltip_left;
+        tooltip_contents.style.right = tooltip_right;
+        tooltip_contents.style.bottom = tooltip_bottom;
 			},
 
 			mouse_out: function( e ) {
-				var tooltip_contents = e.target.parentElement.childNodes[0];
-				tooltip_contents.style.display = 'none';
+				e.target.parentElement.childNodes[0].style.display = 'none';
 			}
 		}
 	}

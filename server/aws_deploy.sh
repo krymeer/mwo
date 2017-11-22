@@ -3,7 +3,7 @@ set -e
 # package the stack
 echo "> packaging the stack"
 aws cloudformation package \
-    --template-file api.yaml \
+    --template-file stack.yaml \
     --output-template-file aws-out.yaml \
      --s3-bucket todo.mwo.app
 
@@ -11,7 +11,7 @@ aws cloudformation package \
 echo "> deploying..."
 aws cloudformation deploy \
     --template-file aws-out.yaml \
-    --stack-name mwo-todo \
+    --stack-name mwo-todo-1 \
     --capabilities CAPABILITY_NAMED_IAM
 
 # cleanup

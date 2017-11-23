@@ -10,8 +10,7 @@
 			    	<span>usunąć?</span>
 						<i class="material-icons" @click="deleteNote(index)">check</i> <i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">close</i>
 			    </div>
-			    <span>{{ note.contents }}</span>
-			    <!--v-show="!show_big_popup && !note.show_deletion_bar"-->
+			    <span v-html="note.contents"></span>
 			    <div class="btn_panel" >
 						<i class="material-icons" @click="editNote(index)">mode_edit</i>
 						<i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">delete</i>
@@ -35,11 +34,11 @@
 		created: function() {
 			// TODO: get data from the EventBus and assign it to this.notes
 			//this.notes = notes;
-		},
-		computed: {
-			// TODO (send get notes request)
-			// auth.getNotes().then();
-			// ???
+			EventBus.$on("save-note", (contents, k) => {
+				this.notes[k].contents = contents;
+				// TODO communication with the EventBus
+				// ID of the note in the database: this.notes[k].id
+			});
 		},
 		data: function() {
 			return {
@@ -51,7 +50,6 @@
 			addFirstNote: function() {
 				this.no_notes = false;
 				this.addNote();
-
 			},
 			addNote: function() {
 				var k = 0, n = this.notes.length;
@@ -63,32 +61,29 @@
 				this.notes.push(
 					{ id: k, contents: '', show_deletion_bar: false }
 				)
-
 				// TODO communication with the EventBus
 			},
 			editNote: function(k) {
 				var n = this.notes.length;
 
 				if (k > -1 && k < n) {
-					EventBus.$emit("edit-note", this.notes[k].contents, this.notes[k].id);
-
-					// TODO
+					EventBus.$emit("edit-note", this.notes[k].contents, k);
 				}
 			},
 			deleteNote: function(k) {
 				var n = this.notes.length;
 
 				if (k > -1 && k < n) {
+					var noteId = this.notes[k].id;
 					this.notes[k].show_deletion_bar = false;
-          this.notes.splice(this.notes[k], 1);
+          this.notes.splice(k, 1);
           n--;
 
           if (n === 0) {
           	this.no_notes = true;
           }
-
-					// TODO (send delete note request)
-					// auth.deleteNote(k).then()
+					// TODO communication with the EventBus
+					// ID of the note in the database: noteId 
 				}
 			}
 		},

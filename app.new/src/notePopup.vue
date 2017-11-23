@@ -6,37 +6,51 @@
     </div>
     <div class="contents_wrapper">
       <div id="note_placeholder" v-show="showPlaceholder">Tu wpisz swoją notatkę...</div>
-      <div contentEditable="true" @keydown="handleKeyPressed" @keyup.esc="hideNotePopup" v-on:paste="removeStyling" @keyup="handleNoteText" class="contents" id="note_contents">{{ noteContents }}</div>
-      <!--
-        Previously there was a conditional rendering:
-          v-if="notes.length > 0 && note_no > -1"
-      -->
+      <div contentEditable="true" @keydown="handleKeyPressed" @keyup.esc="hideNotePopup" v-on:paste="removeStyling" @keyup="handleNoteText" class="contents" id="note_contents"></div>
     </div>
     <button class="save" @click="saveNote">zapisz</button>
   </div>
 </template>
 
 <script>
-  import './css/notePopup.css'
+  function encodeInequalitySymbols(str) {
+    return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function decodeInequalitySymbols(str) {
+    return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  }
+
+  function toNewlines(str) {
+    return str.replace(/<br>/g, '\n');
+  }
+
+  function toLineBreaks(str) {
+    return str.replace(/\n/g, '<br>');
+  }
+  import './css/notePopup.css';
   import EventBus from "./eventBus";
   export default {
     created: function() {
-      EventBus.$on("edit-note", (noteContents, noteId) => {
-        this.noteContents = noteContents;
+      EventBus.$on("edit-note", (contents, noteId) => {
+        if (contents.replace(/ /g, '').length > 0) {
+          this.showPlaceholder = false;
+          contents = decodeInequalitySymbols(contents);
+          contents = toNewlines(contents);
+        } else {
+          contents = '';
+        }
         this.noteId = noteId;
         this.showNotePopup = true;
-        if (this.noteContents.replace(/ /g, '').length > 0) {
-          this.showPlaceholder = false;
-        }
+        document.getElementById('note_contents').innerText = contents;
       });
     },
     data: function() {
       return {
         showNotePopup: false,
         showPlaceholder: true,
-        noteContents: '',
         noteId: -1,
-        previousKey: -1
+        previousKey: -1,
       }
     },
     methods: {
@@ -57,38 +71,22 @@
       },
       removeStyling: function(event) {
         event.preventDefault();
-        var data = (event.clipboardData || window.clipboardData).getData('text').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var data = encodeInequalitySymbols((event.clipboardData || window.clipboardData).getData('text'));
         document.execCommand('insertHTML', false, data);        
       },
       saveNote: function() {
-        /*
-          Previous version
-
-          save_note: function() {
-          var text = document.getElementById('note_contents').innerText;
-          var note_id = globals.notes[globals.note_no].id;
-          Vue.set(globals.notes, globals.note_no, {id: note_id, contents: text, show_deletion_bar: false});
-          Vue.http.post( "php_query.php", {action: "save_note", contents: text, user_id: user_id, note_id:  note_id});
-          globals.note_no = -1;
-          globals.show_big_popup = false;
-        */
-
         var updatedContents = document.getElementById('note_contents').innerText;
-        updatedContents = updatedContents.replace(/\n$/, '').replace(/\n/g, '<br>')
+        updatedContents = encodeInequalitySymbols(updatedContents);
+        updatedContents = updatedContents.replace(/\n$/, '');
+        updatedContents = toLineBreaks(updatedContents);
 
-        /*
-          Here we ought to send a pair (this.noteId, updatedContents) to:
-          - the database,
-          - the listOfNotes component (?) ‒ so as tu update contents of the modified note.
-        */
-
+        EventBus.$emit("save-note", updatedContents, this.noteId);
         this.hideNotePopup();
       },
       hideNotePopup: function() {
-        this.showNotePopup = !this.showNotePopup;
+        this.showNotePopup = false;
+        this.showPlaceholder = true;
       }
     }
   }
 </script>
-
-<style></style>

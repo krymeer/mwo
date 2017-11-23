@@ -15,4 +15,6 @@ aws cloudformation deploy `
     --capabilities CAPABILITY_NAMED_IAM
 
 # cleanup
-rm $PSScriptRoot/aws-out.yaml
+if ($?) {
+    rm $PSScriptRoot/aws-out.yaml
+}

@@ -1,17 +1,44 @@
 <template>
-  <div class="popup" v-if="showPopup">{{ messages[msgId] }}</div>
+  <div class="popup" v-if="showPopup">
+    <p class="popup-message">{{ text }}</p>
+    <input :type="message.input"
+  </div>
 </template>
 
 <script>
 import "./css/popups.css";
 import EventBus from "./eventBus";
+
+const Message = function(text, timeout) {
+  this.text = text
+  this.timeout = timeout
+}
+
 export default {
   created: function() {
     EventBus.$on("show-popup", msgId => {
       this.msgId = msgId;
       this.showPopup = true
-      setTimeout(() => {this.showPopup = false}, 1500);
+      let message = this.messages[msgId] 
+      if (message.timeout) {
+        setTimeout(() => {this.showPopup = false}, message.timeout);
+      }
     });
+  },
+  computed: {
+    message: function() {
+      
+    },
+    text: function() {
+      let message = this.messages[this.msgId] 
+      console.log("[popup:text] message:", message)
+      if (typeof message === "string") {
+        return message
+      }
+      if (message instanceof Message) {
+        return message.text
+      }
+    }
   },
   data: function() {
     return {
@@ -21,7 +48,8 @@ export default {
         "Żadne pole nie może pozostać puste.",
         "To pole nie może pozostać puste.",
         "Nieprawidłowa nazwa użytkownika lub hasło.",
-        "Wylogowanie przebiegło pomyślnie."
+        "Wylogowanie przebiegło pomyślnie.",
+        new Message("Twoje konto nie jest jeszcze aktywne", false)
       ]
     };
   }

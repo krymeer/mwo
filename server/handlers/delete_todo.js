@@ -5,7 +5,7 @@ const common = require('./common.todo')
 const dynamo = common.dynamo();
 
 exports.handler = (event, context, callback) => {
-    console.log('Received GET event:', JSON.stringify(event, null, 2));
+    console.log('Received DELETE event:', JSON.stringify(event, null, 2));
     
     common.getTableName('Todos')
         .then(actualName => {

@@ -1,24 +1,24 @@
 <template>
 	<div class="grid" id="page_contents">
 		<h2 class="page_naem">pulpit</h2>
-		<div v-if="!no_notes">
+		<div v-if="!noNotes">
   		<notePopup></notePopup>
 	    <i class="material-icons" @click="addNote" id="add_note">note_add</i>
 	    <div class="grid" id="grid_of_notes">
 				<div class="note" v-for="(note, index) in notes">
-			    <div class="deletion_bar" v-show="note.show_deletion_bar">
+			    <div class="deletion_bar" v-show="note.showDeletionBar">
 			    	<span>usunąć?</span>
-						<i class="material-icons" @click="deleteNote(index)">check</i> <i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">close</i>
+						<i class="material-icons" @click="deleteNote(index)">check</i> <i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">close</i>
 			    </div>
 			    <span v-html="note.contents"></span>
 			    <div class="btn_panel" >
 						<i class="material-icons" @click="editNote(index)">mode_edit</i>
-						<i class="material-icons" @click="note.show_deletion_bar = !note.show_deletion_bar">delete</i>
+						<i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">delete</i>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div v-else-if="no_notes" id="no_notes">
+		<div v-else-if="noNotes" id="no_notes">
 			Nie masz jeszcze żadnych notatek.
 			<button @click="addFirstNote">dodaj nową</button>
 		</div>
@@ -43,12 +43,12 @@
 		data: function() {
 			return {
 				notes: [],
-				no_notes: true
+				noNotes: true
 			}
 		},
 		methods: {
 			addFirstNote: function() {
-				this.no_notes = false;
+				this.noNotes = false;
 				this.addNote();
 			},
 			addNote: function() {
@@ -59,7 +59,7 @@
 				}
 
 				this.notes.push(
-					{ id: k, contents: '', show_deletion_bar: false }
+					{ id: k, contents: '', showDeletionBar: false }
 				)
 				// TODO communication with the EventBus
 			},
@@ -75,12 +75,12 @@
 
 				if (k > -1 && k < n) {
 					var noteId = this.notes[k].id;
-					this.notes[k].show_deletion_bar = false;
+					this.notes[k].showDeletionBar = false;
           this.notes.splice(k, 1);
           n--;
 
           if (n === 0) {
-          	this.no_notes = true;
+          	this.noNotes = true;
           }
 					// TODO communication with the EventBus
 					// ID of the note in the database: noteId 

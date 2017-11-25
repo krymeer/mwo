@@ -29,12 +29,12 @@ Resources:
                 name: note
                 description: A note to be saved
                 schema:
-                  $ref: '#/definitions/noteNew'
+                  $ref: '#/definitions/NoteNew'
               responses:
                 "200":
                   description: created
                   schema:
-                    $ref: '#/definitions/note'
+                    $ref: '#/definitions/Note'
               x-amazon-apigateway-integration:
                 uri:
                   Fn::Join:
@@ -59,7 +59,7 @@ Resources:
                   schema:
                     type: array
                     items:
-                      $ref: '#/definitions/note'
+                      $ref: '#/definitions/Note'
               x-amazon-apigateway-integration:
                 uri:
                   Fn::Join:
@@ -85,8 +85,7 @@ Resources:
               x-amazon-apigateway-integration:
                 type: mock
                 requestTemplates:
-                  application/json:
-                    statusCode: 200
+                  application/json: "{\"statusCode\": 200}"
                 responses:
                   "default":
                     statusCode: "200"
@@ -121,7 +120,7 @@ Resources:
                 '200':
                   description: OK
                   schema:
-                    $ref: '#/definitions/note'
+                    $ref: '#/definitions/Note'
                 '404':
                   description: Not found
               x-amazon-apigateway-integration:
@@ -143,12 +142,12 @@ Resources:
               - name: note
                 in: body
                 schema:
-                  $ref: '#/definitions/note'
+                  $ref: '#/definitions/Note'
               responses:
                 '200':
                   description: OK
                   schema:
-                    $ref: '#/definitions/note'
+                    $ref: '#/definitions/Note'
               x-amazon-apigateway-integration:
                 uri:
                   Fn::Join:
@@ -168,7 +167,7 @@ Resources:
                 '200':
                   description: OK
                   schema:
-                    $ref: '#/definitions/note'
+                    $ref: '#/definitions/Note'
               x-amazon-apigateway-integration:
                 uri:
                   Fn::Join:
@@ -217,7 +216,7 @@ Resources:
                     Access-Control-Allow-Origin:
                       type: "string"
         definitions:
-          "noteNew":
+          "NoteNew":
             description: Data required for creating a new note
             type: object
             properties:
@@ -225,7 +224,7 @@ Resources:
                 type: string
               Content:
                 type: string
-          "note":
+          "Note":
             description: The entire note object
             type: object
             properties:

@@ -6,7 +6,7 @@ const dynamo = common.dynamo();
 
 exports.handler = (event, context, callback) => {
     console.log('Received GET event:', JSON.stringify(event, null, 2));
-    
+
     if(event.resource == "/todo/{id}"){
         common.getTableName('Todos')
         .then(actualName => {
@@ -17,7 +17,7 @@ exports.handler = (event, context, callback) => {
                 ExpressionAttributeValues: {':id': event.pathParameters.id}
             }).promise()
         })
-        .then(data => callback(null, common.makeResponse(null, data.items)))
+        .then(data => callback(null, common.makeResponse(null, data.items || {Items: []})))
         .catch(error => callback(null, common.makeResponse(error, null)))
     } else {
         common.getTableName('Todos')
@@ -29,8 +29,8 @@ exports.handler = (event, context, callback) => {
                 ExpressionAttributeValues: {':user_id': event.requestContext.authorizer.claims.sub}
             }).promise()
         })
-        .then(data => callback(null, common.makeResponse(null, data.items)))
+        .then(data => callback(null, common.makeResponse(null, data.items || {Items: []})))
         .catch(error => callback(null, common.makeResponse(error, null)))
     }
-    
+
 }

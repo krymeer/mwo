@@ -17,7 +17,7 @@ exports.handler = (event, context, callback) => {
                 ExpressionAttributeValues: {':id': event.pathParameters.id}
             }).promise()
         })
-        .then(data => callback(null, common.makeResponse(null, data.items || {Items: []})))
+        .then(data => callback(null, common.makeResponse(null, data.Items || {Items: []})))
         .catch(error => callback(null, common.makeResponse(error, null)))
     } else {
         common.getTableName('Todos')
@@ -29,7 +29,7 @@ exports.handler = (event, context, callback) => {
                 ExpressionAttributeValues: {':user_id': event.requestContext.authorizer.claims.sub}
             }).promise()
         })
-        .then(data => callback(null, common.makeResponse(null, data.items || {Items: []})))
+        .then(data => callback(null, common.makeResponse(null, data.Items || {Items: []})))
         .catch(error => callback(null, common.makeResponse(error, null)))
     }
 

@@ -18,7 +18,7 @@ exports.handler = (event, context, callback) => {
     let payload = JSON.parse(event.body)
     let todo = {
         ID: makeID(8),
-        UserID: payload.UserID,
+        UserID: event.requestContext.authorizer.claims.sub,
         Content: payload.Content,
         CreatedAt: Date.now()
     }

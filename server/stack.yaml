@@ -220,10 +220,9 @@ Resources:
             description: Data required for creating a new note
             type: object
             properties:
-              UserID:
-                type: string
               Content:
                 type: string
+            required: ['Content']
           "Note":
             description: The entire note object
             type: object
@@ -237,6 +236,7 @@ Resources:
               CreatedAt:
                 type: integer
             additionalProperties: false
+            required: ['ID', 'Content']
         securityDefinitions:
           mwoUserPool:
             type: apiKey

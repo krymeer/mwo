@@ -9,7 +9,7 @@ const stack = new AWS.CloudFormation();
 exports.makeResponse = (err, res) => {
     return {
         statusCode: err ? '400' : '200',
-        body: err ? err.message : JSON.stringify(res),
+        body: err ? JSON.stringify({Error: err.message}) : JSON.stringify(res),
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'

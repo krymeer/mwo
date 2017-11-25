@@ -326,6 +326,8 @@ Resources:
           AttributeType: "S"
         - AttributeName: "UserID"
           AttributeType: "S"
+        - AttributeName: "CreatedAt"
+          AttributeType: "N"
       KeySchema:
         - AttributeName: "ID"
           KeyType: HASH
@@ -337,10 +339,7 @@ Resources:
             - AttributeName: "CreatedAt"
               KeyType: RANGE
           Projection:
-            ProjectionType: INCLUDE
-            NonKeyAttributes:
-              - "Content"
-              - "CreatedAt"
+            ProjectionType: ALL
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
@@ -420,7 +419,6 @@ Resources:
   TodoHandlerRole:
     Type: AWS::IAM::Role
     Properties:
-      # RoleName: TodoHandlerRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       AssumeRolePolicyDocument:
@@ -462,3 +460,4 @@ Resources:
               - "dynamodb:UpdateItem"
             Resource:
               - !GetAtt Todos.Arn
+              - !Join ["", [!GetAtt Todos.Arn, "/index/*"]]

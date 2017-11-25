@@ -36,8 +36,8 @@ exports.getTableName = (logicalName) => {
             LogicalResourceId: logicalName
         },
             (err, data) => {
-                console.log('DescribeStackResource: err=', err, "data=", data)
                 if (err) {
+                    console.error(`DescribeStackResource ${logicalName} failed: `, err)
                     reject(err)
                 } else {
                     resolve(data.StackResourceDetail.PhysicalResourceId)

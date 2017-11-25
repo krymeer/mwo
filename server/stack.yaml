@@ -322,11 +322,9 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        -
-          AttributeName: "ID"
+        - AttributeName: "ID"
           AttributeType: "S"
-        -
-          AttributeName: "UserID"
+        - AttributeName: "UserID"
           AttributeType: "S"
       KeySchema:
         - AttributeName: "ID"
@@ -336,6 +334,8 @@ Resources:
           KeySchema:
             - AttributeName: "UserID"
               KeyType: HASH
+            - AttributeName: "CreatedAt"
+              KeyType: RANGE
           Projection:
             ProjectionType: INCLUDE
             NonKeyAttributes:
@@ -350,22 +350,6 @@ Resources:
       Tags:
         - Key: Application
           Value: mwo-todo
-  # Users:
-  #   Type: AWS::DynamoDB::Table
-  #   Properties:
-  #     AttributeDefinitions:
-  #       -
-  #         AttributeName: "ID"
-  #         AttributeType: "S"
-  #     KeySchema:
-  #       - AttributeName: "ID"
-  #         KeyType: HASH
-  #     ProvisionedThroughput:
-  #       ReadCapacityUnits: 5
-  #       WriteCapacityUnits: 5
-  #     Tags:
-  #       - Key: Application
-  #         Value: mwo-todo
   PostTodoLambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -478,19 +462,3 @@ Resources:
               - "dynamodb:UpdateItem"
             Resource:
               - !GetAtt Todos.Arn
-              # - Fn::Join:
-              #   - ""
-              #   - - "arn:aws:dynamodb:"
-              #     - Ref: AWS::Region
-              #     - ":"
-              #     - Ref: AWS::AccountId
-              #     - ":table/"
-              #     - Ref: Todos
-              # - Fn::Join:
-              #   - ""
-              #   - - "arn:aws:dynamodb:"
-              #     - Ref: AWS::Region
-              #     - ":"
-              #     - Ref: AWS::AccountId
-              #     - ":table/"
-              #     - Ref: Users

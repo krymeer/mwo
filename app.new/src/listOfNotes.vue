@@ -1,6 +1,6 @@
 <template>
   <div class="grid" id="page_contents">
-    <h2 class="page_naem">pulpit</h2>
+    <h2 class="page_name">pulpit</h2>
     <div class="grid" v-if="loadingFinished">
       <div v-if="!noNotes">
         <notePopup></notePopup>

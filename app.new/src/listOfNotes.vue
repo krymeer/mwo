@@ -1,26 +1,31 @@
 <template>
   <div class="grid" id="page_contents">
     <h2 class="page_naem">pulpit</h2>
-    <div v-if="!noNotes">
-      <notePopup></notePopup>
-      <i class="material-icons" @click="addNote" id="add_note">note_add</i>
-      <div class="grid" id="grid_of_notes">
-        <div class="note" v-for="(note, index) in notes">
-          <div class="deletion_bar" v-show="note.showDeletionBar">
-            <span>usunąć?</span>
-            <i class="material-icons" @click="deleteNote(index)">check</i> <i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">close</i>
-          </div>
-          <span v-html="note.contents"></span>
-          <div class="btn_panel" >
-            <i class="material-icons" @click="editNote(index)">mode_edit</i>
-            <i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">delete</i>
+    <div class="grid" v-if="loadingFinished">
+      <div v-if="!noNotes">
+        <notePopup></notePopup>
+        <i class="material-icons" @click="addNote" id="add_note">note_add</i>
+        <div class="grid" id="grid_of_notes">
+          <div class="note" v-for="(note, index) in notes">
+            <div class="deletion_bar" v-show="note.showDeletionBar">
+              <span>usunąć?</span>
+              <i class="material-icons" @click="deleteNote(index)">check</i> <i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">close</i>
+            </div>
+            <span v-html="note.contents"></span>
+            <div class="btn_panel" >
+              <i class="material-icons" @click="editNote(index)">mode_edit</i>
+              <i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">delete</i>
+            </div>
           </div>
         </div>
       </div>
+      <div v-else-if="noNotes" id="no_notes">
+        Nie masz jeszcze żadnych notatek.
+        <button @click="addFirstNote">dodaj nową</button>
+      </div>
     </div>
-    <div v-else-if="noNotes" id="no_notes">
-      Nie masz jeszcze żadnych notatek.
-      <button @click="addFirstNote">dodaj nową</button>
+    <div v-else-if="!loadingFinished">
+      <loader></loader>
     </div>
   </div>
 </template>
@@ -30,12 +35,12 @@
   var apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
   import './css/listOfNotes.css'
   import notePopup from './notePopup.vue'
+  import loader from './loader.vue'
   import auth from './user/auth'
   import EventBus from './eventBus'
   export default {
     created: function() {
       auth.getUser().then(result => {
-        console.log(this.noNotes);
         var token = result.idToken.jwtToken;
         if (typeof token != 'undefined') {
           vr.Http.get(apiURL, { headers: { 'Authorization': token } }).then(response => {
@@ -48,9 +53,12 @@
                 );
               }
             }
+            // Here we hide the loader
+            this.loadingFinished = true;
           }, response => {
             console.error('Loading notes failed')
           });
+
         }
       });
       // TODO: get data from the EventBus and assign it to this.notes
@@ -64,7 +72,8 @@
     data: function() {
       return {
         notes: [],
-        noNotes: true
+        noNotes: true,
+        loadingFinished: false
       }
     },
     methods: {
@@ -109,7 +118,7 @@
       }
     },
     components: {
-      notePopup 
+      notePopup, loader
     }
   }
 </script>

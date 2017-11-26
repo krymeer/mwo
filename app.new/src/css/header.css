@@ -1,0 +1,57 @@
+header h1 {
+  font-size: 4rem;
+}
+
+header {
+  height: 80px;
+  line-height: 80px;
+  padding: 0 .25rem;
+  background: transparent;
+  font-family: 'Unica One', cursive;
+  text-transform: lowercase;
+}
+
+header::before {
+  top: 0;
+  height: 80px;
+  background: #990100;
+}
+
+header::before, footer::before {
+  display: block;
+  position: absolute;
+  content: '';
+  width: 100vw;
+  left: 0;
+  z-index: -1;
+}
+
+header {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+header > a,
+header > a:first-of-type:hover {
+  color: #fff
+}
+
+header > a {
+  height: 80px;
+}
+
+header > a:first-of-type {
+  justify-self: start;
+}
+
+header i.material-icons {
+  justify-self: end;
+  align-self: center;
+  color: #fff;
+  font-size: 3.5rem;
+  cursor: pointer;
+}
+
+header i.material-icons:hover {
+  color: #f7b538;
+}

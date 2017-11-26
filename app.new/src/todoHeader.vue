@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  import './css/header.css'
   import EventBus from './eventBus'
   export default {
     props: {
@@ -26,5 +27,3 @@
     }
   }
 </script>
-
-<style></style>

@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import './css/styles.css'
 import { Login, auth } from './user'
 import listOfNotes from './listOfNotes.vue'
 import noContents from './noContents.vue'
@@ -47,6 +48,3 @@ export default {
   }
 }
 </script>
-
-<style src="./css/styles.css"></style>
-<style src="./css/index.css"></style>

@@ -1,0 +1,19 @@
+footer {
+  background: transparent;
+  color: #fff;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 .25rem;
+  overflow: hidden;  
+}
+
+footer::before {
+  height: 40px;
+  background: #333;
+}
+
+footer > div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

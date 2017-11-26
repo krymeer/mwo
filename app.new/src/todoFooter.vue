@@ -4,6 +4,7 @@
   </footer>
 </template>
 
-<script></script>
-
-<style></style>
+<script>
+  import './css/footer.css'
+  export default {}
+</script>

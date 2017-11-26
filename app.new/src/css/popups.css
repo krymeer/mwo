@@ -22,3 +22,9 @@
 .popup i:hover {
   color: #b90504;
 }
+
+@media screen and (min-width: 768px) {
+  .popup {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,25 @@
+#menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-auto-flow: column;
+  justify-content: center;
+  grid-gap: 12px;
+}
+
+#menu li {
+  cursor: pointer;
+  text-align: center;
+}
+
+#menu li:hover {
+  color: #990100;
+}
+
+#menu li i {
+  font-size: 40px;
+}
+
+#menu li div {
+  font-size: 13px;
+}

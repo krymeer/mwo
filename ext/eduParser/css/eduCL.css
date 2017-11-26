@@ -1,0 +1,37 @@
+#error div:first-of-type {
+  grid-auto-flow: column;
+  justify-content: center;
+  margin-bottom: 10px;
+  grid-column-gap: 4px;
+}
+
+#error div:first-of-type span {
+  align-self: center;
+}
+
+#error div:nth-of-type(2) {
+  line-height: 1.25;
+}
+
+#download_btns {
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(8, auto);
+  grid-row-gap: 4px;
+}
+
+#download_btns li {
+  background: #333;
+  color: #fff;
+  text-transform: lowercase;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  justify-self: start;
+}
+
+#download_btns li:hover {
+  background: #990100;
+}

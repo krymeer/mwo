@@ -1,0 +1,108 @@
+body {
+  width: 300px;
+  margin: 0;
+  color: #333;
+  font-family: 'Roboto', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#popup_container {
+  position: relative;
+  width: 100%;
+  min-height: 150px;
+  background: #dee7e7;
+  grid-template-rows: 50px auto;
+}
+
+#main_content {
+  padding: 4px;
+  align-self: center;
+}
+
+.contents {
+  align-self: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.grid {
+  display: grid;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
+
+#back_btn {
+  position: absolute;
+  right: 4px;
+  top: 54px;
+  cursor: pointer;
+}
+
+#back_btn:hover {
+  background: #cad9d9;
+}
+
+.educl_advice {
+  font-size: 10px;
+}
+
+.contents a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contents a:hover {
+  color: #990100;
+}
+
+.font_tiny {
+  font-size: 10px;
+}
+
+.font_small {
+  font-size: 12px;
+}
+
+.font_normal {
+  font-size: 14px;
+}
+
+.font_bold {
+  font-weight: bold;
+}
+
+.margin_top {
+  margin-top: 8px;
+}
+
+.margin_bottom {
+  margin-bottom: 8px;
+}
+
+.margin_left {
+  margin-left: 8px;
+}
+
+.margin_right {
+  margin-right: 8px;
+}

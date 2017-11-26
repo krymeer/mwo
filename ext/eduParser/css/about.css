@@ -1,0 +1,13 @@
+#about {
+  font-size: 12px;
+  grid-gap: 8px;
+}
+
+#about div:first-of-type {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#about div:last-of-type {
+  font-size: 10px;
+}

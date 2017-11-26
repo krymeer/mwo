@@ -36,6 +36,7 @@ function getCoursesData(tables) {
   return groupsArray;
 }
 
+/*
 $(document).ready(function() {
   var data = $('body').html();
   var i0 = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
@@ -52,3 +53,4 @@ $(document).ready(function() {
     console.error('Error: this page does not contain the required data');
   }
 });
+*/

@@ -1,0 +1,33 @@
+header {
+  height: 50px;
+  background: #709775;
+  display: grid;
+  grid-auto-flow: column;
+}
+
+header > * {
+  align-self: center;
+  padding: 4px;
+}
+
+header > h1 {
+  font-family: 'Nova Square', cursive;
+  font-weight: normal;
+  margin: 0;
+  font-size: 32px;
+  color: #fff;
+}
+
+#todoapp_link {
+  text-transform: lowercase;
+  background: #990100;
+  height: 100%;
+  display: grid;
+  align-content: center;
+  color: #fff;
+  font-family: 'Unica One', cursive;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  justify-self: end;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
+    <link rel="stylesheet" type="text/css" href="css/menu.css">
+    <link rel="stylesheet" type="text/css" href="css/about.css">
+    <link rel="stylesheet" type="text/css" href="css/eduCL.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nova+Square|Unica+One|Roboto" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
+    <script type="text/javascript" src="js/parser.js"></script>
+  </head>
+  <body>
+    <div class="grid" id="popup_container">
+      <header>
+        <h1>eduParser</h1>
+        <a id="todoapp_link" target="blank" href="http://localhost:8080">todoapp</a>
+      </header>
+      <i class="material-icons hidden" id="back_btn">arrow_back</i>
+      <div class="grid" id="main_content">
+        <ul class="contents grid" id="menu">
+          <li id="li_parse">
+            <i class="material-icons">content_cut</i>
+            <div>wytnij plan</div>
+          </li>
+          <li id="li_about">
+            <i class="material-icons">info</i>
+            <div>o rozszerzeniu</div>
+          </li>
+        </ul>
+        <div class="contents grid hidden" id="about">
+          <div>eduParser v0.1</div>
+          <div>Rozszerzenie umożliwiające wygenerowanie planu zajęć na podstawie danych z <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>.</div>
+          <div>&copy; 2017 Krzysztof Osada</div>
+        </div>
+        <div class="contents grid hidden" id="data_success">
+          <div class="font_normal font_bold">Sukces!</div>
+          <div class="font_small margin_bottom">
+            Co chcesz zrobić z zebranymi danymi?
+          </div>
+          <!-- TODO: sent to ToDoApp -->
+          <div class="font_small">Pobierz je jako:</div>
+          <ul class="grid" id="download_btns">
+            <li id="download_json">JSON</li>
+          </ul>
+        </div>
+        <div class="contents grid hidden" id="error">
+          <div class="grid font_normal"><span id="error_title"></span><i class="material-icons" id="error_icon"></i></div>
+          <div class="font_tiny justify" id="error_contents"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

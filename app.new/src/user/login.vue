@@ -10,11 +10,11 @@
         </div>
         <div class="form-field">
           <label for="input-login">nazwa użytkownika</label>
-          <input type="text" id="input-login" :class="{error: !loginValid}" v-model="login" maxlength="24" />
+          <input type="text" id="input-login" @keyup.enter="triggerSignin" :class="{error: !loginValid}" v-model="login" maxlength="24" />
         </div>
         <div class="form-field">
           <label for="input-password">hasło</label>
-          <input type="password" id="input-password" :class="{error: !passwordValid}" v-model="password" maxlength="32" />
+          <input type="password" id="input-password" @keyup.enter="triggerSignin" :class="{error: !passwordValid}" v-model="password" maxlength="32" />
         </div>
         <div class="spacer_zero span_2"></div>
         <a id="resetPassBtn" v-if="showResetPassLink" @click="setTab(Tab.RESET_PASS)" class="fblock">nie pamiętam hasła</a>
@@ -113,6 +113,11 @@ export default {
     }
   },
   methods: {
+    triggerSignin: function() {
+      if (this.isValid && this.activeTab === this.Tab.LOGIN) {
+        this.activeTab.action();
+      }
+    },
     signin: function() {
       console.debug("[login:signin] called");
       auth.signIn(this.login, this.password).then(
@@ -124,8 +129,6 @@ export default {
           console.error(err);
           this.status = { error: true, details: err };
           EventBus.$emit("show-popup", 2);
-          // this.$parent.showPopup = true;
-          // this.$parent.messageNumber = 2;
         }
       );
     },  

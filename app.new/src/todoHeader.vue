@@ -3,11 +3,12 @@
     <a class="block" href="./">
       <h1>ToDoApp</h1>
     </a>
-    <i v-show="materialIcon" class="material-icons" @click="clickIcon">{{ materialIcon }}</i>
+    <i v-if="materialIcon" class="material-icons" @click="clickIcon">{{ materialIcon }}</i>
   </header>
 </template>
 
 <script>
+  import EventBus from './eventBus'
   export default {
     props: {
       materialIcon: {
@@ -19,13 +20,11 @@
       clickIcon: function() {
         var i_id = this._props.materialIcon;
         if (i_id === 'power_settings_new') {
-          window.location.href = "./logout.php";
+          EventBus.$emit('user-logout');
         }
       }
     }
   }
-
-
 </script>
 
 <style></style>

@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  var token;
   var vr      = require('vue-resource');
   var apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
   import './css/listOfNotes.css'
@@ -41,10 +42,10 @@
   export default {
     created: function() {
       auth.getUser().then(result => {
-        var token = result.idToken.jwtToken;
+        token = result.idToken.jwtToken;
         if (typeof token != 'undefined') {
-          vr.Http.get(apiURL, { headers: { 'Authorization': token } }).then(response => {
-            var items = response.body.Items;
+          vr.Http.get(apiURL, { headers: { 'Authorization': token } }).then(done => {
+            var items = done.body.Items;
             if (items.length > 0) {
               this.noNotes = false;
               for (var k = 0; k < items.length; k++) {
@@ -55,18 +56,18 @@
             }
             // Here we hide the loader
             this.loadingFinished = true;
-          }, response => {
-            console.error('Loading notes failed')
+          }, fail => {
+            console.error('Loading notes failed');
           });
-
         }
       });
-      // TODO: get data from the EventBus and assign it to this.notes
-      //this.notes = notes;
       EventBus.$on("save-note", (contents, k) => {
         this.notes[k].contents = contents;
-        // TODO communication with the EventBus
-        // ID of the note in the database: this.notes[k].id
+        if (typeof token != 'undefined') {
+          vr.Http.put(apiURL + '/' + this.notes[k].id, { Content: contents, headers: { 'Authorization': token } }).then(done => {}, fail => {
+            console.error('Updating note failed');
+          });
+        }
       });
     },
     data: function() {
@@ -91,7 +92,12 @@
         this.notes.push(
           { id: k, contents: '', showDeletionBar: false }
         )
-        // TODO communication with the EventBus
+
+        if (typeof token != 'undefined') {
+          vr.Http.post(apiURL, { Content: '', headers: { 'Authorization': token } }).then(done => {}, fail => {
+            console.error('Adding note failed');
+          });
+        }
       },
       editNote: function(k) {
         var n = this.notes.length;
@@ -112,8 +118,12 @@
           if (n === 0) {
             this.noNotes = true;
           }
-          // TODO communication with the EventBus
-          // ID of the note in the database: noteId 
+
+          if (typeof token != 'undefined') {
+            vr.Http.delete(apiURL + '/' + noteId, { headers: { 'Authorization': token } }).then(done => {}, fail => {
+              console.error('Deleting note failed');
+            });
+          }
         }
       }
     },

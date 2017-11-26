@@ -27,6 +27,7 @@ export default {
       auth.signOut();
       this.loggedIn = false;
       this.icon = undefined;
+      EventBus.$emit("show-popup", 3);    
     });
     auth.getUser().then(result => {
       this.loggedIn = result !== null

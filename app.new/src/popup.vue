@@ -24,6 +24,9 @@ export default {
         setTimeout(() => {this.showPopup = false}, message.timeout);
       }
     });
+    EventBus.$on("hide-popup", () => {
+      this.showPopup = false;
+    });
   },
   computed: {
     message: function() {
@@ -49,7 +52,7 @@ export default {
         "To pole nie może pozostać puste.",
         "Nieprawidłowa nazwa użytkownika lub hasło.",
         "Wylogowanie przebiegło pomyślnie.",
-        new Message("Twoje konto nie jest jeszcze aktywne", false)
+        new Message("Twoje konto nie jest jeszcze aktywne.", false)
       ]
     };
   }

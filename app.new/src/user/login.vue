@@ -115,7 +115,7 @@ export default {
   methods: {
     triggerSignin: function() {
       if (this.isValid && this.activeTab === this.Tab.LOGIN) {
-        this.activeTab.action();
+        this.signin();
       }
     },
     signin: function() {
@@ -124,6 +124,7 @@ export default {
         session => {
           EventBus.$emit("user-login", session.idToken);
           this.clearInputs();
+          EventBus.$emit("hide-popup");
         },
         err => {
           console.error(err);

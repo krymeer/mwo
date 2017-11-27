@@ -7,6 +7,9 @@ const AWS = require('aws-sdk');
 const stack = new AWS.CloudFormation();
 
 exports.makeResponse = (err, res) => {
+    if (err) {
+        console.error("An error occurred:", err)
+    }
     return {
         statusCode: err ? '400' : '200',
         body: err ? JSON.stringify({Error: err.message}) : JSON.stringify(res),

@@ -15,7 +15,12 @@ const makeID = (len, chars) => {
 
 exports.handler = (event, context, callback) => {
     console.log('Received POST event:', JSON.stringify(event, null, 2));
-    let payload = JSON.parse(event.body)
+    let payload = undefined
+    try {
+        payload = JSON.parse(event.body)
+    } catch (err) {
+        callback(null, common.makeResponse(err))
+    }
     let todo = {
         ID: makeID(8),
         UserID: event.requestContext.authorizer.claims.sub,

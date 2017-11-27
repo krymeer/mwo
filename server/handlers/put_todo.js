@@ -6,8 +6,12 @@ const dynamo = common.dynamo();
 
 exports.handler = (event, context, callback) => {
     console.log('Received PUT event:', JSON.stringify(event, null, 2));
-    var body = JSON.parse(event.body);
-    
+    let payload = undefined
+    try {
+        payload = JSON.parse(event.body)
+    } catch (err) {
+        callback(null, common.makeResponse(err))
+    }
     common.getTableName('Todos')
         .then(actualName => {
             return dynamo.update({
@@ -17,7 +21,7 @@ exports.handler = (event, context, callback) => {
                 },
                 UpdateExpression: "set Content = :c",
                 ExpressionAttributeValues:{
-                    ":c": body.Content
+                    ":c": payload.Content
                 },
                 ConditionExpression: "attribute_exists(ID)",
                 ReturnValues:"UPDATED_NEW"
@@ -25,5 +29,5 @@ exports.handler = (event, context, callback) => {
         })
         .then(data => callback(null, common.makeResponse(null, data)))
         .catch(error => callback(null, common.makeResponse(error, null)))
-    
+
 }

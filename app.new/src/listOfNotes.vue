@@ -32,18 +32,21 @@
 
 <script>
   const apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
-  import vr from 'vue-resource';
-  import './css/listOfNotes.css'
-  import notePopup from './notePopup.vue'
-  import loader from './loader.vue'
-  import auth from './user/auth'
-  import EventBus from './eventBus'
+  import './css/listOfNotes.css';
+  import notePopup from './notePopup.vue';
+  import loader from './loader.vue';
+  import auth from './user/auth';
+  import EventBus from './eventBus';
+  import Vue from 'vue';
+  import VueResource from'vue-resource';
+  Vue.use(VueResource);
   export default {
     created: function() {
       auth.getUser().then(result => {
         this.token = result.idToken.jwtToken;
-        if (typeof token != 'undefined') {
-          vr.Http.get(apiURL, { headers: { 'Authorization': this.token } }).then(done => {
+
+        if (typeof this.token != 'undefined') {
+          this.$http.get(apiURL, { headers: { 'Authorization': this.token } }).then(done => {
             var items = done.body.Items;
             if (items.length > 0) {
               this.noNotes = false;
@@ -62,8 +65,9 @@
       });
       EventBus.$on("save-note", (contents, k) => {
         this.notes[k].contents = contents;
-        if (typeof token != 'undefined') {
-          vr.Http.put(apiURL + '/' + this.notes[k].id, { Content: contents, headers: { 'Authorization': token } }).then(done => {}, fail => {
+
+        if (typeof this.token != 'undefined') {
+          this.$http.put(apiURL + '/' + this.notes[k].id, { Content: contents }, { headers: { 'Authorization': this.token } }).then(done => {}, fail => {
             console.error('Updating note failed');
           });
         }
@@ -82,18 +86,12 @@
         this.addNote();
       },
       addNote: function() {
-        var k = 0, n = this.notes.length;
-
-        if (n > 0) {
-          k = 1 + this.notes[n-1].id
-        }
-
-        this.notes.push(
-          { id: k, contents: '', showDeletionBar: false }
-        )
-
-        if (typeof token != 'undefined') {
-          vr.Http.post(apiURL, { Content: '', headers: { 'Authorization': token } }).then(done => {}, fail => {
+        if (typeof this.token != 'undefined') {
+          this.$http.post(apiURL, { Content: ' ' }, { headers: { 'Authorization': this.token } }).then(done => {
+            this.notes.push(
+              { id: done.body.ID, contents: '', showDeletionBar: false }
+            )            
+          }, fail => {
             console.error('Adding note failed');
           });
         }
@@ -118,8 +116,8 @@
             this.noNotes = true;
           }
 
-          if (typeof token != 'undefined') {
-            vr.Http.delete(apiURL + '/' + noteId, { headers: { 'Authorization': token } }).then(done => {}, fail => {
+          if (typeof this.token != 'undefined') {
+            this.$http.delete(apiURL + '/' + noteId, { headers: { 'Authorization': this.token } }).then(done => {}, fail => {
               console.error('Deleting note failed');
             });
           }

@@ -54,43 +54,49 @@ $(document).ready(function() {
   function handleEduCLPage() {
     chrome.tabs.getSelected(function(tab) {
       var url   = tab.url;
-      var i0    = url.indexOf('edukacja.pwr.wroc.pl');
-      var i1    = url.indexOf('zapisy.do');
-      var i2    = url.indexOf('ZapisySzczSlu');
+      console.log(tab);
+      if (typeof url !== 'undefined') {
+        var i0    = url.indexOf('edukacja.pwr.wroc.pl');
+        var i1    = url.indexOf('zapisy.do');
+        var i2    = url.indexOf('ZapisySzczSlu');
 
-      if (i0 > 0 && i1 > 0 && i2 > 0) {
-        // The active tab is likely to be the page we look for
-        chrome.tabs.executeScript({
-          code: '('+ getPageContents +')();'
-        }, (results) => {
-          if (results.length > 0) {
-            data = results[0];
-            var i3 = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
-            var i4 = data.indexOf('<!-- grupy zajeciowe: poczatek -->');
-            var i5 = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
+        if (i0 > 0 && i1 > 0 && i2 > 0) {
+          // The active tab is likely to be the page we look for
+          chrome.tabs.executeScript({
+            code: '('+ getPageContents +')();'
+          }, (results) => {
+            if (results.length > 0) {
+              data = results[0];
+              var i3 = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
+              var i4 = data.indexOf('<!-- grupy zajeciowe: poczatek -->');
+              var i5 = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
 
-            if (i3 > 0 && i4 > 0 && i5 > 0) {
-              var dataWrapper   = $('<div/>').html(data.substring(i4, i5));
-              var tables        = dataWrapper.find('table.KOLOROWA');
-              var coursesArray  = getCoursesData(tables);
+              if (i3 > 0 && i4 > 0 && i5 > 0) {
+                var dataWrapper   = $('<div/>').html(data.substring(i4, i5));
+                var tables        = dataWrapper.find('table.KOLOROWA');
+                var coursesArray  = getCoursesData(tables);
 
-              if (coursesArray.length > 0) {
-                showSection('data_success');
-                handleDownload(coursesArray);
+                if (coursesArray.length > 0) {
+                  showSection('data_success');
+                  handleDownload(coursesArray);
+                } else {
+                  showErrorSection(1);
+                }
               } else {
                 showErrorSection(1);
               }
             } else {
               showErrorSection(1);
             }
-          } else {
-            showErrorSection(1);
-          }
-        });
-      } else if (i0 > 0) {
-        showErrorSection(2);
+          });
+        } else if (i0 > 0) {
+          showErrorSection(2);
+        } else {
+          showErrorSection(0);
+        }
       } else {
-        showErrorSection(0);
+        // The popup with focus on itself will not work properly
+        window.close();
       }
     });
   }

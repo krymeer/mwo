@@ -9,16 +9,17 @@ $(document).ready(function() {
   }
 
   function showErrorSection(k) {
-    var msg_title     = ['To nie jest dobra strona.', 'Wystąpił nieznany błąd', 'Jesteś już blisko!'];
+    var msg_title     = ['To nie jest dobra strona.', 'Wystąpił nieznany błąd', 'Jesteś już blisko!', 'Zmień semestr'];
     var msg_contents  = [
       'Wejdź na <a href="https://edukacja.pwr.wroc.pl" target="blank">stronę Edukacji.CL</a>, zaloguj się, znajdź zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj jeszcze raz.',
       'Pobieranie danych nie udało się. Uruchom przeglądarkę ponownie bądź skontaktuj się z <a href="mailto:krzysztof.radoslaw.osada@gmail.com">autorem</a> wtyczki.',
-      'Wygląda na to, że znajdujesz się na stronie <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>. Otwórz zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj ponownie.'
+      'Wygląda na to, że znajdujesz się na stronie <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>. Otwórz zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj ponownie.',
+      'Plan zajęć na wybrany przez Ciebie semestr nie jest jeszcze znany ‒ wybierz inny i spróbuj jeszcze raz.'
     ]
     var icons         = ['sentiment_very_dissatisfied', 'sentiment_satisfied'];
     var selectedIcon  = icons[0];
 
-    if (k === 2) {
+    if (k >= 2) {
       selectedIcon = icons[1];
     }
 
@@ -54,24 +55,24 @@ $(document).ready(function() {
   function handleEduCLPage() {
     chrome.tabs.getSelected(function(tab) {
       var url   = tab.url;
-      console.log(tab);
-      if (typeof url !== 'undefined') {
-        var i0    = url.indexOf('edukacja.pwr.wroc.pl');
-        var i1    = url.indexOf('zapisy.do');
-        var i2    = url.indexOf('ZapisySzczSlu');
+      var i0    = url.indexOf('edukacja.pwr.wroc.pl'); 
 
-        if (i0 > 0 && i1 > 0 && i2 > 0) {
+      if (typeof url !== 'undefined') {
+        if (i0 > 0) {
           // The active tab is likely to be the page we look for
           chrome.tabs.executeScript({
             code: '('+ getPageContents +')();'
           }, (results) => {
             if (results.length > 0) {
-              data = results[0];
+              var data = results[0];
+              var i1 = data.indexOf('W wybranym semestrze nie jesteś zapisany(na) do żadnej grupy zajęciowej.');
               var i3 = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
               var i4 = data.indexOf('<!-- grupy zajeciowe: poczatek -->');
               var i5 = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
 
-              if (i3 > 0 && i4 > 0 && i5 > 0) {
+              if (i1 > 0) {
+                showErrorSection(3);
+              } else if (i3 > 0 && i4 > 0 && i5 > 0) {
                 var dataWrapper   = $('<div/>').html(data.substring(i4, i5));
                 var tables        = dataWrapper.find('table.KOLOROWA');
                 var coursesArray  = getCoursesData(tables);
@@ -82,15 +83,14 @@ $(document).ready(function() {
                 } else {
                   showErrorSection(1);
                 }
+
               } else {
-                showErrorSection(1);
+                showErrorSection(2);
               }
             } else {
               showErrorSection(1);
             }
           });
-        } else if (i0 > 0) {
-          showErrorSection(2);
         } else {
           showErrorSection(0);
         }

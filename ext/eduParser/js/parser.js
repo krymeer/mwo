@@ -20,12 +20,22 @@ function getCoursesData(tables) {
       } else if (rowIndex === 3) {
         var details = cells.eq(0).text().split(/\s\s+/);
         groupDetails = [];
+        
         for (var k = 0; k < details.length; k++) {
           var detailsArr = details[k].split(', ');
-          groupDetails.push(
-            { 'time': detailsArr[0], 'building': detailsArr[1].slice(5), 'room': detailsArr[2].slice(5) }
-          );
+        
+          if (detailsArr.length === 3) {
+            groupDetails.push(
+              { 'time': detailsArr[0], 'building': detailsArr[1].slice(5), 'room': detailsArr[2].slice(5) }
+            );
+          } else {
+            groupDetails.push(
+              { 'time': 'undetermined' }
+            )
+          }
+          
         }
+
         groupsArray.push(
           { 'code': groupCode, 'type': groupType, 'courseName': courseName, 'academic': academic, 'details': groupDetails }
         );
@@ -35,22 +45,3 @@ function getCoursesData(tables) {
 
   return groupsArray;
 }
-
-/*
-$(document).ready(function() {
-  var data = $('body').html();
-  var i0 = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
-  var i1 = data.indexOf('<!-- grupy zajeciowe: poczatek -->');
-  var i2 = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
-
-  if (i0 > 0 && i1 > 0 && i2 > 0) {
-    var dataWrapper   = $('<div/>').html(data.substring(i1, i2));
-    var tables        = dataWrapper.find('table.KOLOROWA');
-    var coursesArray  = getCoursesData(tables);
-
-    console.log(coursesArray)
-  } else {
-    console.error('Error: this page does not contain the required data');
-  }
-});
-*/

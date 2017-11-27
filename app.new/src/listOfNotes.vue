@@ -31,9 +31,8 @@
 </template>
 
 <script>
-  var token;
-  var vr      = require('vue-resource');
-  var apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
+  const apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
+  import vr from 'vue-resource';
   import './css/listOfNotes.css'
   import notePopup from './notePopup.vue'
   import loader from './loader.vue'
@@ -42,9 +41,9 @@
   export default {
     created: function() {
       auth.getUser().then(result => {
-        token = result.idToken.jwtToken;
+        this.token = result.idToken.jwtToken;
         if (typeof token != 'undefined') {
-          vr.Http.get(apiURL, { headers: { 'Authorization': token } }).then(done => {
+          vr.Http.get(apiURL, { headers: { 'Authorization': this.token } }).then(done => {
             var items = done.body.Items;
             if (items.length > 0) {
               this.noNotes = false;

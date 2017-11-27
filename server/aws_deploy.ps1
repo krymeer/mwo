@@ -8,7 +8,7 @@ aws cloudformation package `
      --s3-bucket todo.mwo.app
 
 # deploy
-echo "> deploying..."
+echo "> deploying"
 aws cloudformation deploy `
     --template-file $PSScriptRoot/aws-out.yaml `
     --stack-name $stackName `
@@ -17,4 +17,15 @@ aws cloudformation deploy `
 # cleanup
 if ($?) {
     rm $PSScriptRoot/aws-out.yaml
+    echo ">updating api log settings"
+    $API_ID = aws apigateway get-rest-apis --query '(items[?name==`TodoApi`].id)[0]' --output=text
+    aws apigateway delete-stage --rest-api-id $API_ID --stage-name 'Stage'
+    aws apigateway update-stage `
+        --rest-api-id $API_ID `
+        --stage-name 'v1' `
+        --patch-operations `
+            op=replace,path=/*/*/logging/dataTrace,value=true `
+            op=replace,path=/*/*/logging/loglevel,value=INFO `
+        --output text
+
 }

@@ -6,7 +6,6 @@ Resources:
     Properties:
       Name: TodoApi
       StageName: v1
-      # DefinitionUri: ./api.yaml
       DefinitionBody:
         swagger: "2.0"
         info:
@@ -44,7 +43,7 @@ Resources:
                       - ":lambda:path/2015-03-31/functions/"
                       - !GetAtt TodoPostHandler.Arn
                       - /invocations
-                passthroughBehavior: "when_no_templates"
+                passthroughBehavior: "when_no_match"
                 httpMethod: "POST"
                 type: "aws_proxy"
             get:
@@ -91,7 +90,7 @@ Resources:
                     statusCode: "200"
                     responseParameters:
                       method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-                      method.response.header.Access-Control-Allow-Methods : "'*'"
+                      method.response.header.Access-Control-Allow-Methods : "'OPTIONS,GET,POST'"
                       method.response.header.Access-Control-Allow-Origin : "'*'"
                     responseTemplates:
                       application/json: |
@@ -193,14 +192,13 @@ Resources:
               x-amazon-apigateway-integration:
                 type: mock
                 requestTemplates:
-                  application/json:
-                    "statusCode" : 200
+                  application/json: "{\"statusCode\" : 200}"
                 responses:
                   "default":
                     statusCode: "200"
                     responseParameters:
                       method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-                      method.response.header.Access-Control-Allow-Methods : "'*'"
+                      method.response.header.Access-Control-Allow-Methods : "'OPTIONS,GET,PUT,DELETE'"
                       method.response.header.Access-Control-Allow-Origin : "'*'"
                     responseTemplates:
                       application/json: |

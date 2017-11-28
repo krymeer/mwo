@@ -1,0 +1,13 @@
+.google-calendar {
+  position: absolute;
+  right: 5rem;
+  top: 1.3rem;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.google-calendar > #content {
+	z-index: 1000;
+	background-color: #fff;
+	font-size: x-small;
+}

@@ -23,6 +23,7 @@
         Nie masz jeszcze żadnych notatek.
         <button @click="addFirstNote">dodaj nową</button>
       </div>
+      <googleCalendar></googleCalendar>
     </div>
     <div v-else-if="!loadingFinished">
       <loader></loader>
@@ -39,6 +40,7 @@
   import EventBus from './eventBus';
   import Vue from 'vue';
   import VueResource from'vue-resource';
+  import googleCalendar from './googleCalendar.vue'
   Vue.use(VueResource);
   export default {
     created: function() {
@@ -125,7 +127,7 @@
       }
     },
     components: {
-      notePopup, loader
+      notePopup, loader, googleCalendar
     }
   }
 </script>

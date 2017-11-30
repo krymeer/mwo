@@ -185,3 +185,21 @@ button {
 button:hover {
   background: #b90504;
 }
+
+[data-title] {
+  position: relative;
+}
+
+[data-title]:hover::after {
+  background: #444;
+  position: absolute;
+  font-family: 'Roboto', sans-serif;
+  font-size: .75rem;
+  color: #fff;
+  padding: .25rem;
+  border-radius: 4px;
+  content: attr(data-title);
+  display: block;
+  left: 50%;
+  transform: translateX(-50%);
+}

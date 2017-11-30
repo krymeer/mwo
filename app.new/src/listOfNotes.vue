@@ -2,9 +2,12 @@
   <div class="grid" id="page_contents">
     <h2 class="page_name">pulpit</h2>
     <div class="grid" v-if="loadingFinished">
+      <div class="grid" id="control_panel">
+        <googleCalendar></googleCalendar>
+        <i v-if="!noNotes" class="material-icons" @click="addNote" data-title="dodaj notatkę" id="add_note">note_add</i>
+      </div>
       <div v-if="!noNotes">
         <notePopup></notePopup>
-        <i class="material-icons" @click="addNote" data-title="dodaj notatkę" id="add_note">note_add</i>
         <div class="grid" id="grid_of_notes">
           <div class="note" v-for="(note, index) in notes">
             <div class="deletion_bar" v-show="note.showDeletionBar">
@@ -23,7 +26,6 @@
         Nie masz jeszcze żadnych notatek.
         <button @click="addFirstNote">dodaj nową</button>
       </div>
-      <googleCalendar></googleCalendar>
     </div>
     <div v-else-if="!loadingFinished">
       <loader></loader>

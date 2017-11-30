@@ -78,7 +78,6 @@ body {
   grid-row-gap: .125rem;
 }
 
-
 .note > .deletion_bar > span {
   grid-column: span 2;
 }
@@ -99,16 +98,22 @@ body {
   font-size: 2.5rem;
 }
 
-#add_note {
+#control_panel {
   position: absolute;
   right: .5rem;
   top: 1rem;
   font-size: 2.5rem;
   cursor: pointer;
+  grid-auto-flow: column;
+  grid-column-gap: .5rem;
+}
+
+#control_panel > i {
+  font-size: 2.5rem;
 }
 
 .btn_panel i:hover,
-#add_note:hover {
+#control_panel > i:hover {
   color: #b90504;
 }
 

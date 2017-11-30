@@ -65,12 +65,23 @@
           });
         }
       });
-      EventBus.$on("save-note", (contents, k) => {
+      EventBus.$on("update-note", (contents, k) => {
         this.notes[k].contents = contents;
 
         if (typeof this.token != 'undefined') {
           this.$http.put(apiURL + '/' + this.notes[k].id, { Content: contents }, { headers: { 'Authorization': this.token } }).then(done => {}, fail => {
             console.error('Updating note failed');
+          });
+        }
+      });
+      EventBus.$on("save-new-note", (noteContents) => {
+        if (typeof this.token != 'undefined') {
+          this.$http.post(apiURL, { Content: noteContents }, { headers: { 'Authorization': this.token } }).then(done => {
+            this.notes.push(
+              { id: done.body.ID, contents: noteContents, showDeletionBar: false }
+            )            
+          }, fail => {
+            console.error('Adding note failed');
           });
         }
       });
@@ -88,15 +99,7 @@
         this.addNote();
       },
       addNote: function() {
-        if (typeof this.token != 'undefined') {
-          this.$http.post(apiURL, { Content: ' ' }, { headers: { 'Authorization': this.token } }).then(done => {
-            this.notes.push(
-              { id: done.body.ID, contents: '', showDeletionBar: false }
-            )            
-          }, fail => {
-            console.error('Adding note failed');
-          });
-        }
+        EventBus.$emit("add-note");
       },
       editNote: function(k) {
         var n = this.notes.length;

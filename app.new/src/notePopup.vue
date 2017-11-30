@@ -1,7 +1,8 @@
 <template>
   <div class="popup big_popup" v-show="showNotePopup">
     <div class="header grid grid_horizontal">
-      <h2>Edytuj notatkę</h2>
+      <h2 v-if="showAddNoteTitle">Dodaj notatkę</h2> 
+      <h2 v-else-if="!showAddNoteTitle">Edytuj notatkę</h2>
       <i class="material-icons" @click="hideNotePopup">close</i>
     </div>
     <div class="contents_wrapper">
@@ -32,6 +33,11 @@
   import EventBus from "./eventBus";
   export default {
     created: function() {
+      EventBus.$on("add-note", () => {
+        this.showNotePopup = true;
+        this.showAddNoteTitle = true;
+        document.getElementById('note_contents').innerText = '';
+      });
       EventBus.$on("edit-note", (contents, noteId) => {
         if (contents.replace(/ /g, '').length > 0) {
           this.showPlaceholder = false;
@@ -47,6 +53,7 @@
     },
     data: function() {
       return {
+        showAddNoteTitle: false,
         showNotePopup: false,
         showPlaceholder: true,
         noteId: -1,
@@ -80,7 +87,12 @@
         updatedContents = updatedContents.replace(/\n$/, '');
         updatedContents = toLineBreaks(updatedContents);
 
-        EventBus.$emit("save-note", updatedContents, this.noteId);
+        if (this.showAddNoteTitle) {
+          EventBus.$emit("save-new-note", updatedContents);
+          this.showAddNoteTitle = false;
+        } else {
+          EventBus.$emit("update-note", updatedContents, this.noteId);
+        }
         this.hideNotePopup();
       },
       hideNotePopup: function() {

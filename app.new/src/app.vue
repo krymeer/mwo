@@ -3,8 +3,9 @@
     <popup></popup>
     <todoHeader></todoHeader>
     <noContents v-if="typeof loggedIn == 'undefined'"></noContents>
-    <login v-if="loggedIn === false"></login>
-    <listOfNotes v-if="loggedIn === true"></listOfNotes>
+    <login v-if="!showSchedule && loggedIn === false"></login>
+    <listOfNotes v-if="!showSchedule && loggedIn === true"></listOfNotes>
+    <eduSchedule v-if="showSchedule"></eduSchedule>
     <todoFooter></todoFooter>
  </div>
 </template>
@@ -12,6 +13,7 @@
 <script>
 import './css/styles.css'
 import { Login, auth } from './user'
+import eduSchedule from './eduSchedule.vue'
 import listOfNotes from './listOfNotes.vue'
 import noContents from './noContents.vue'
 import todoHeader from './todoHeader.vue'
@@ -23,6 +25,9 @@ export default {
     EventBus.$on("user-login", e => {
       EventBus.$emit("show-navbar", true);
       this.loggedIn = true;
+    });
+    EventBus.$on("user-schedule", () => {
+      this.showSchedule = true;
     });
     EventBus.$on("user-logout", () => {
       auth.signOut();
@@ -36,11 +41,12 @@ export default {
   },
   data: function() {
     return {
-			loggedIn: undefined
+			loggedIn: undefined,
+      showSchedule: false
     };
   },
   components: {
-    Login, todoHeader, todoFooter, popup, listOfNotes, noContents
+    Login, todoHeader, todoFooter, popup, listOfNotes, noContents, eduSchedule
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <a class="block" href="./">
       <h1>ToDoApp</h1>
     </a>
-    <i v-if="materialIcon" class="material-icons" @click="clickIcon">{{ materialIcon }}</i>
+    <i data-title="wyloguj się" v-if="materialIcon" class="material-icons" @click="clickIcon">{{ materialIcon }}</i>
   </header>
 </template>
 

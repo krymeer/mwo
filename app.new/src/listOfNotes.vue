@@ -4,7 +4,7 @@
     <div class="grid" v-if="loadingFinished">
       <div v-if="!noNotes">
         <notePopup></notePopup>
-        <i class="material-icons" @click="addNote" id="add_note">note_add</i>
+        <i class="material-icons" @click="addNote" data-title="dodaj notatkę" id="add_note">note_add</i>
         <div class="grid" id="grid_of_notes">
           <div class="note" v-for="(note, index) in notes">
             <div class="deletion_bar" v-show="note.showDeletionBar">
@@ -13,8 +13,8 @@
             </div>
             <span v-html="note.contents"></span>
             <div class="btn_panel" >
-              <i class="material-icons" @click="editNote(index)">mode_edit</i>
-              <i class="material-icons" @click="note.showDeletionBar = !note.showDeletionBar">delete</i>
+              <i class="material-icons" data-title="edytuj notatkę" @click="editNote(index)">mode_edit</i>
+              <i class="material-icons" data-title="usuń notatkę" @click="note.showDeletionBar = !note.showDeletionBar">delete</i>
             </div>
           </div>
         </div>

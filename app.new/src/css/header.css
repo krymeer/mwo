@@ -36,22 +36,10 @@ header > a:first-of-type:hover {
   color: #fff
 }
 
-header > a {
+header > * {
   height: 80px;
 }
 
 header > a:first-of-type {
   justify-self: start;
-}
-
-header i.material-icons {
-  justify-self: end;
-  align-self: center;
-  color: #fff;
-  font-size: 3.5rem;
-  cursor: pointer;
-}
-
-header i.material-icons:hover {
-  color: #f7b538;
 }

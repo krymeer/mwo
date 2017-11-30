@@ -1,0 +1,27 @@
+nav {
+  display: grid;
+  justify-self: end;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-column-gap: .5rem;
+}
+
+nav > i.material-icons {
+  font-size: 2.5rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+nav > i.material-icons:hover {
+  color: #f7b538;
+}
+
+@media screen and (min-width: 721px) {
+  nav {
+    grid-column-gap: .75rem;
+  }
+
+  nav > i.material-icons {
+    font-size: 3rem;
+  }
+}

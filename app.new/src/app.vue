@@ -1,7 +1,7 @@
 <template>
  <div id="main_container" class="grid">
     <popup></popup>
-    <todoHeader :materialIcon="icon"></todoHeader>
+    <todoHeader></todoHeader>
     <noContents v-if="typeof loggedIn == 'undefined'"></noContents>
     <login v-if="loggedIn === false"></login>
     <listOfNotes v-if="loggedIn === true"></listOfNotes>
@@ -21,26 +21,22 @@ import EventBus from './eventBus'
 export default {
 	created: function() {
     EventBus.$on("user-login", e => {
+      EventBus.$emit("show-navbar", true);
       this.loggedIn = true;
-      this.icon = "power_settings_new";
     });
     EventBus.$on("user-logout", () => {
       auth.signOut();
       this.loggedIn = false;
-      this.icon = undefined;
       EventBus.$emit("show-popup", 3);    
     });
     auth.getUser().then(result => {
       this.loggedIn = result !== null
-      if (this.loggedIn) {
-        this.icon = "power_settings_new";
-      }
-    })
+      EventBus.$emit("show-navbar", this.loggedIn);
+    });
   },
   data: function() {
     return {
-			loggedIn: undefined,
-      icon: undefined
+			loggedIn: undefined
     };
   },
   components: {

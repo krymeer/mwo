@@ -3,27 +3,16 @@
     <a class="block" href="./">
       <h1>ToDoApp</h1>
     </a>
-    <i data-title="wyloguj się" v-if="materialIcon" class="material-icons" @click="clickIcon">{{ materialIcon }}</i>
+    <navBar></navBar>
   </header>
 </template>
 
 <script>
-  import './css/header.css'
-  import EventBus from './eventBus'
+  import './css/header.css';
+  import navBar from './navBar.vue'
   export default {
-    props: {
-      materialIcon: {
-        type: String,
-        default: ''
-      }
-    },
-    methods: {
-      clickIcon: function() {
-        var i_id = this._props.materialIcon;
-        if (i_id === 'power_settings_new') {
-          EventBus.$emit('user-logout');
-        }
-      }
+    components: {
+      navBar
     }
   }
 </script>

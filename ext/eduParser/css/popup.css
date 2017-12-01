@@ -106,3 +106,15 @@ body {
 .margin_right {
   margin-right: 8px;
 }
+
+.todoapp_link {
+  text-transform: lowercase;
+  background: #990100;
+  height: 100%;
+  color: #fff;
+  font-family: 'Unica One', cursive;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  justify-self: end;
+}

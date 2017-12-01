@@ -35,3 +35,21 @@
 #download_btns li:hover {
   background: #990100;
 }
+
+#goto_todoapp {
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  justify-content: start;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-column-gap: 4px;
+}
+
+#goto_todoapp .todoapp_link {
+  padding: 2px;
+}
+
+#goto_todoapp:hover span:first-of-type {
+  color: #990100;
+}

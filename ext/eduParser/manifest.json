@@ -15,7 +15,20 @@
  		"128": "img/icon128.png"
  	},
 
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:8080/*"],
+      "js": [ "js/content_script.js" ]
+    }
+  ],
+
   "permissions": [
-    "activeTab"
+    "tabs", "https://*/", "http://*/", "storage"
   ]
 }

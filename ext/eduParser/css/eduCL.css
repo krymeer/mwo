@@ -46,10 +46,6 @@
   grid-column-gap: 4px;
 }
 
-#goto_todoapp .todoapp_link {
-  padding: 2px;
-}
-
 #goto_todoapp:hover span:first-of-type {
-  color: #990100;
+  color: #555;
 }

@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "eduParser",
-  "version": "0.2",
+  "version": "0.3",
   "description": "This extension collects the information about the student's schedule of academic courses and sends it to the ToDoApp application.",
 
   "browser_action": {

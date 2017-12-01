@@ -111,7 +111,7 @@ body {
   text-transform: lowercase;
   background: #990100;
   height: 100%;
-  color: #fff;
+  color: #fff !important;
   font-family: 'Unica One', cursive;
   font-size: 12px;
   font-weight: bold;
@@ -119,12 +119,17 @@ body {
   justify-self: end;
 }
 
-#token_not_found {
-  margin: 4px;
-  padding: 4px;
+.todoapp_link.small {
+  padding: 2px;
+}
+
+.todoapp_link.inline {
+  line-height: 2;
 }
 
 .alert {
+  margin: 8px 4px 4px 4px;
+  padding: 4px;
   font-size: 11px;
   border-width: 1px;
   border-radius: 4px;

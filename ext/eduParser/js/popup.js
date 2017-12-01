@@ -7,30 +7,32 @@ function showSection(sectionName) {
   $('#' + sectionName).removeClass('hidden');
 }
 
-function showErrorSection(k) {
-  var msg_title     = ['To nie jest dobra strona.', 'Wystąpił nieznany błąd', 'Jesteś już blisko!', 'Zmień semestr'];
+function showMessageSection(k, l) {
+  var msg_title     = ['To nie jest dobra strona.', 'Wystąpił nieznany błąd', 'Jesteś już blisko!', 'Zmień semestr', 'Odmowa dostępu', 'Udało się'];
   var msg_contents  = [
     'Wejdź na <a href="https://edukacja.pwr.wroc.pl" target="blank">stronę Edukacji.CL</a>, zaloguj się, znajdź zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj jeszcze raz.',
     'Pobieranie danych nie udało się. Uruchom przeglądarkę ponownie bądź skontaktuj się z <a href="mailto:krzysztof.radoslaw.osada@gmail.com">autorem</a> wtyczki.',
     'Wygląda na to, że znajdujesz się na stronie <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>. Otwórz zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj ponownie.',
-    'Plan zajęć na wybrany przez Ciebie semestr nie jest jeszcze znany ‒ wybierz inny i spróbuj jeszcze raz.'
+    'Plan zajęć na wybrany przez Ciebie semestr nie jest jeszcze znany ‒ wybierz inny i spróbuj jeszcze raz.',
+    'Rozszerzenie nie zna tokenu umożliwiającego dodanie danych do aplikacji. Zaloguj się w <a href="http://localhost:8080" class="todoapp_link inline small" target="blank">ToDoApp</a> i spróbuj ponownie.',
+    'Twoje dane z <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a> zostały pomyślnie przekazane.'
   ]
-  var icons         = ['sentiment_very_dissatisfied', 'sentiment_satisfied'];
-  var selectedIcon  = icons[0];
-
-  if (k >= 2) {
-    selectedIcon = icons[1];
-  }
+  var icons         = ['sentiment_very_dissatisfied', 'sentiment_satisfied', 'sentiment_very_satisfied'];
 
   $('#error_title').text(msg_title[k]);
   $('#error_contents').html(msg_contents[k]);
-  $('#error_icon').html(selectedIcon);
+  $('#error_icon').html(icons[l]);
   showSection('error');
 }
 
 function handleToDoApp(dataArray) {
   $('#goto_todoapp').click(function() {
-    // TODO
+    if (!token) {
+      showMessageSection(4, 0);
+    } else {
+      showMessageSection(5, 2);
+      // TODO send data to API
+    }
   });
 }
 
@@ -77,7 +79,7 @@ function handleEduCLPage() {
             var i5 = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
 
             if (i1 > 0) {
-              showErrorSection(3);
+              showMessageSection(3, 1);
             } else if (i3 > 0 && i4 > 0 && i5 > 0) {
               var dataWrapper   = $('<div/>').html(data.substring(i4, i5));
               var tables        = dataWrapper.find('table.KOLOROWA');
@@ -86,20 +88,20 @@ function handleEduCLPage() {
               if (coursesArray.length > 0) {
                 showSection('data_success');
                 handleToDoApp(coursesArray);;
-                //handleDownload(coursesArray);
+                handleDownload(coursesArray);
               } else {
-                showErrorSection(1);
+                showMessageSection(1, 0);
               }
 
             } else {
-              showErrorSection(2);
+              showMessageSection(2, 1);
             }
           } else {
-            showErrorSection(1);
+            showMessageSection(1, 0);
           }
         });
       } else {
-        showErrorSection(0);
+        showMessageSection(0, 0);
       }
     } else {
       // The popup with focus on itself will not work properly
@@ -116,7 +118,9 @@ $(document).ready(function() {
 
     // If the token is not available, show an appropriate messsage
     if (!token) {
-      $('#token_not_found').show();
+      $('#token_not_found').removeClass('hidden');
+    } else {
+      $('#token_not_found').addClass('hidden');
     }
   });
 

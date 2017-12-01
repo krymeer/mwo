@@ -118,3 +118,33 @@ body {
   text-decoration: none;
   justify-self: end;
 }
+
+#token_not_found {
+  margin: 4px;
+  padding: 4px;
+}
+
+.alert {
+  font-size: 11px;
+  border-width: 1px;
+  border-radius: 4px;
+  border-style: solid;
+}
+
+.alert.alert_error {
+  color: #a94442;
+  background: #f2dede;
+  border-color: #ebccd1;
+}
+
+.alert.alert_success {
+  color: #3c763d;
+  background: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.alert.alert_warning {
+  color: #8a6d3b;
+  background: #fcf8e3;
+  border-color: #faebcc;
+}

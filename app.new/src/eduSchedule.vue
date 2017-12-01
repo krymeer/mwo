@@ -3,7 +3,7 @@
     <h2 class="page_name">plan zajęć</h2>
     <div id="no_schedule_msg">
       Tutaj pojawi się Twój plan zajęć z Edukacji.CL. Użyj rozszerzenia <b>eduParser</b> i pobierz wymagane informacje.
-      <div class="margin-top" v-if="!tokenAlreadySent">
+      <div id="tokenNotSent" class="margin-top" v-if="!tokenAlreadySent">
         Naciśnij przycisk <button class="margin-left-50 margin-right-50" @click="sendToken()">wyślij token</button> aby udostępnić <b>eduParserowi</b> swój token.
       </div>
       <div class="margin-top" v-if="tokenJustSent">
@@ -16,11 +16,6 @@
 <script>
   import auth from './user/auth';
   export default {
-    created: function() {
-      if (window.localStorage.tokenAlreadySent) {
-        this.tokenAlreadySent = true;
-      }
-    },
     methods: { 
       sendToken: function() {
         auth.getUser().then(result => {

@@ -5,6 +5,8 @@
   grid-auto-flow: column;
   justify-content: center;
   grid-gap: 12px;
+  height: 60px;
+  margin: 10px 0;
 }
 
 #menu li {

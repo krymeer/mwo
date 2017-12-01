@@ -112,17 +112,12 @@ var token;
 
 $(document).ready(function() {
   chrome.storage.sync.get(['todoToken'], function(item) { 
-    // Check if the token is available
     token = item.todoToken;
-    var msg;
 
-    if (token) {
-      msg = 'is defined!';
-    } else {
-      msg = 'is not defined!';
+    // If the token is not available, show an appropriate messsage
+    if (!token) {
+      $('#token_not_found').show();
     }
-    
-    $('#for_token').text(msg);
   });
 
   $('#menu li').click(function() {

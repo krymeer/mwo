@@ -8,14 +8,15 @@ function showSection(sectionName) {
 }
 
 function showMessageSection(k, l) {
-  var msg_title     = ['To nie jest dobra strona.', 'Wystąpił nieznany błąd', 'Jesteś już blisko!', 'Zmień semestr', 'Odmowa dostępu', 'Udało się'];
+  var msg_title     = ['To nie jest dobra strona.', 'Wystąpił nieznany błąd', 'Jesteś już blisko!', 'Zmień semestr', 'Odmowa dostępu', 'Udało się', 'Połączenie nieudane'];
   var msg_contents  = [
-    'Wejdź na <a href="https://edukacja.pwr.wroc.pl" target="blank">stronę Edukacji.CL</a>, zaloguj się, znajdź zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj jeszcze raz.',
+    'Wejdź na <a href="https://edukacja.pwr.wroc.pl" target="blank">stronę Edukacji.CL</a>, zaloguj się, znajdź zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w&nbsp;semestrze&rdquo;</b> i spróbuj jeszcze raz.',
     'Pobieranie danych nie udało się. Uruchom przeglądarkę ponownie bądź skontaktuj się z <a href="mailto:krzysztof.radoslaw.osada@gmail.com">autorem</a> wtyczki.',
-    'Wygląda na to, że znajdujesz się na stronie <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>. Otwórz zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w semestrze&rdquo;</b> i spróbuj ponownie.',
+    'Wygląda na to, że znajdujesz się na stronie <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>. Otwórz zakładkę <b>&bdquo;Grupy zajęciowe, do których zapisał się słuchacz w&nbsp;semestrze&rdquo;</b> i spróbuj ponownie.',
     'Plan zajęć na wybrany przez Ciebie semestr nie jest jeszcze znany ‒ wybierz inny i spróbuj jeszcze raz.',
     'Rozszerzenie nie zna tokenu umożliwiającego dodanie danych do aplikacji. Zaloguj się w <a href="http://localhost:8080" class="todoapp_link inline small" target="blank">ToDoApp</a> i spróbuj ponownie.',
-    'Twoje dane z <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a> zostały pomyślnie przekazane.'
+    'Twoje dane z <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a> zostały pomyślnie przekazane.',
+    'Wystąpił błąd komunikacji z <a href="http://localhost:8080" class="todoapp_link inline small" target="blank">ToDoApp</a>. Uruchom przeglądarkę ponownie bądź skontaktuj się z <a href="mailto:krzysztof.radoslaw.osada@gmail.com">autorem</a> wtyczki.',
   ]
   var icons         = ['sentiment_very_dissatisfied', 'sentiment_satisfied', 'sentiment_very_satisfied'];
 
@@ -30,8 +31,25 @@ function handleToDoApp(dataArray) {
     if (!token) {
       showMessageSection(4, 0);
     } else {
-      showMessageSection(5, 2);
-      // TODO send data to API
+      const apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
+      var body      = { Content: dataArray };
+      var bodyJSON  = JSON.stringify(body);
+
+      $.ajax({
+        type: 'POST',
+        url: apiURL,
+        data: bodyJSON,
+        headers: { Authorization: token }
+      })
+      .done(function() {
+        showMessageSection(5, 2);
+      })
+      .fail(function(response) {
+        showMessageSection(6, 0);
+        if (response.responseText) {
+          console.log(response.responseText)
+        }
+      });
     }
   });
 }

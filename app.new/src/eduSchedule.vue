@@ -12,7 +12,23 @@
         </div>
       </div>
       <div v-else-if="!noSchedule">
-        Tutaj pojawi się Twój plan zajęć z Edukacji.CL, ale trzeba go jeszcze posortować i ładnie opakować.
+        <div id="schedule">
+          <div class="day" v-for="day in schedule">
+            <div class="name">{{ day.weekDay }}</div>
+            <ul class="courses">
+              <li class="course" v-for="course in day.courses">
+                <div class="course_hours">{{ course.hours }}</div>
+                <div>
+                  <div class="course_name">{{ course.courseName }}</div>
+                  <div class="course_code">({{ course.code }})</div>
+                </div>
+                <div class="course_academic">{{ course.academic }}</div>
+                <div class="course_place">{{ course.building }} / {{ course.room }}</div>
+                <div class="course_type">{{ course.type }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
     <div v-else-if="!loadingFinished">
@@ -27,6 +43,7 @@
   import VueResource from'vue-resource';
   import loader from './loader.vue';
   import auth from './user/auth';
+  import './css/eduSchedule.css';
   Vue.use(VueResource);
   export default {
     created: function() {
@@ -58,7 +75,7 @@
                   this.noSchedule = true;
                 }
                 
-                console.log(schedule);
+                this.schedule = schedule;
               } else {
                 this.noSchedule = true;
               }
@@ -93,7 +110,8 @@
         tokenJustSent: false,
         token: undefined,
         noSchedule: false,
-        loadingFinished: false
+        loadingFinished: false,
+        schedule: undefined
       }
     }
   }

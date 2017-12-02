@@ -1,0 +1,98 @@
+#schedule {
+  margin-top: .5rem;
+}
+
+.day {
+  margin-bottom: 1.5rem;
+}
+
+.day .name {
+  font-weight: bold;
+  font-size: 1.125rem;
+  margin-bottom: .5rem;
+  text-transform: lowercase;
+}
+
+.courses {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  grid-row-gap: .33rem;
+  list-style: none;
+}
+
+.course {
+  position: relative;
+  display: grid;
+  background: #c9c7c7;
+  border-radius: 8px;
+  padding: .5rem;
+  grid-row-gap: .25rem;
+}
+
+.course > div:not(.course_type) {
+  grid-column: 1;
+}
+
+.course_name {
+  font-weight: bold;
+  color: #990100;
+  font-size: 1.25rem;
+  text-transform: lowercase;
+}
+
+.course_code {
+  font-size: .625rem;
+}
+
+.course_hours {
+  font-weight: bold;
+}
+
+.course_place {
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.course_academic {
+  font-size: .875rem;
+}
+
+.course_academic::first-letter {
+  text-transform: lowercase;
+}
+
+.course_type {
+  text-align: center;
+  width: 2.75rem;
+  padding-right: .5rem;
+  grid-column: 2 / 3;
+  grid-row: 1 / 5;
+  align-self: center;
+  justify-self: end;
+  font-weight: bold;
+  font-size: 2.5rem;
+  text-align: center;
+  background: #333;
+  -webkit-background-clip: text;
+     -moz-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+@media screen and (max-width: 720px) {
+  .course > div:nth-of-type(2) {
+    line-height: 1.5;
+  }
+}
+
+@media screen and (min-width: 721px) {
+  .course > div:nth-of-type(2) {
+    display: grid;
+    justify-content: start;
+    align-items: end;
+    grid-auto-flow: column;
+    grid-column-gap: .5rem;
+  }
+}

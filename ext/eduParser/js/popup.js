@@ -46,9 +46,18 @@ function handleToDoApp(dataArray) {
       })
       .fail(function(response) {
         showMessageSection(6, 0);
-        if (response.responseText) {
-          console.log(response.responseText)
+
+        var responseText = response.responseText;
+        if (responseText) {
+          console.log(responseText)
+      
+          if (responseText.indexOf('Identity token has expired') !== -1) {
+            chrome.storage.sync.clear(function() {
+              console.log('All the items from storage removed')
+            });
+          }
         }
+  
       });
     }
   });

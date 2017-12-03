@@ -21,6 +21,10 @@ $.ajax({
   headers: { Authorization: token }
 })
 ```
+### Vue.js (`vue-resource`)
+```javascript
+this.$http.get(apiURL, { headers: { 'Authorization': token } });
+```
 
 ## POST
 Niezbędny jest argument ``dataAsJSON``, którego wartość to treść notatki, którą chcemy dodać.
@@ -32,6 +36,10 @@ $.ajax({
   data: dataAsJSON,
   headers: { Authorization: token }
 })
+```
+### Vue.js (`vue-resource`)
+```javascript
+this.$http.post(apiURL, dataAsJSON, { headers: { 'Authorization': token } });
 ```
 Jak mówi sama nazwa, `dataAsJSON` powinien być typowym JSON-owym stringiem, np. `{ "Content": "Lorem ipsum dolor sit amet" }`. Jeżeli wysyłane dane będą innego typu ‒ np. tablicowego ‒ API zwróci komunikat o błędzie.
 Przydatna w tym miejscu może okazać się funkcja `JSON.stringify()`, która zwraca dane w postaci akceptowanej przez TodoApi.
@@ -47,6 +55,10 @@ $.ajax({
   headers: { Authorization: token }
 })
 ```
+### Vue.js (`vue-resource`)
+```javascript
+this.$http.put(apiURL + '/{noteID}', dataAsJSON, { headers: { 'Authorization': token } });
+```
 gdzie `{noteID}` jest identyfikatorem notatki, natomiast `dataAsJSON` ‒ jej nową treścią.
 
 ## DELETE
@@ -58,5 +70,9 @@ $.ajax({
   url: apiURL + '/{noteID}',
   headers: { Authorization: token }
 })
+```
+### Vue.js (`vue-resource`)
+```javascript
+this.$http.put(apiURL + '/{noteID}', { headers: { 'Authorization': token } });
 ```
 Podobnie jak wcześniej, `{noteID}` jest identyfikatorem notatki.

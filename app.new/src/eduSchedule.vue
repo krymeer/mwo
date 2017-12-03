@@ -17,7 +17,7 @@
             <div class="name">{{ day.weekDay }}</div>
             <ul class="courses">
               <li class="course" v-for="course in day.courses">
-                <div class="course_hours">{{ course.hours }}</div>
+                <div class="course_hours">{{ course.hours }} <span v-if="course.weekType">{{ course.weekType }}</span></div>
                 <div>
                   <div class="course_name">{{ course.courseName }}</div>
                   <div class="course_code">({{ course.code }})</div>

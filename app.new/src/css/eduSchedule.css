@@ -49,6 +49,10 @@
   font-weight: bold;
 }
 
+.course_hours > span {
+  font-size: .75rem;
+}
+
 .course_place {
   font-size: .8rem;
   font-style: italic;

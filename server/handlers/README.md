@@ -7,7 +7,7 @@ Niezbędna jest znajomość dwóch parametrów:
 const apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
 var token = '...';
 ```
-tj. tokena i adresu URL, pod którym można wykonać dane żądanie. Adres dla `DELETE` i `POST` powinien być rozszerzony o `/{noteID}`, gdzie `{noteID}` jest identyfikatorem notatki (8-znakowym ciągiem alfanumerycznym).
+tj. tokena i adresu URL, pod którym można wykonać dane żądanie. Adres dla `DELETE` i `PUT` powinien być rozszerzony o `/{noteID}`, gdzie `{noteID}` jest identyfikatorem notatki (8-znakowym ciągiem alfanumerycznym).
 
 Wspomniany token powinien być umieszczony jako wartość dla dodatkowego nagłówka ‒ `Authorization`.
 
@@ -37,12 +37,12 @@ Jak mówi sama nazwa, `dataAsJSON` powinien być typowym JSON-owym stringiem, np
 Przydatna w tym miejscu może okazać się funkcja `JSON.stringify()`, która zwraca dane w postaci akceptowanej przez TodoApi.
 
 ## PUT
-Aby zmodyfikować daną notatkę, powinniśmy w adresie URL umieścić jej identyfikator w bazie danych, a także dostarczyć jako parametr w zapytaniu nową treść do wstawienia.
+Jeśli checemy zmodyfikować pewną notatkę, to powinniśmy w adresie URL umieścić jej identyfikator w bazie danych, a także dostarczyć jako parametr w zapytaniu nową treść do wstawienia.
 ### jQuery
 ```javascript
 $.ajax({
-  url: apiURL + '/{noteID}',
   type: 'PUT',
+  url: apiURL + '/{noteID}',
   data: dataAsJSON,
   headers: { Authorization: token }
 })
@@ -50,14 +50,13 @@ $.ajax({
 gdzie `{noteID}` jest identyfikatorem notatki, natomiast `dataAsJSON` ‒ jej nową treścią.
 
 ## DELETE
-Aby usunąć wybraną notatkę, wystarczy, że do `apiURL` dodamy jej identyfikator w bazie danych:
+Do usunięcia wybranej notatki wystarczy „doklejenie” jej identyfikatora w bazie danych do `apiURL` :
 ### jQuery
 ```javascript
 $.ajax({
-  url: apiURL + '/{noteID}',
   type: 'DELETE',
+  url: apiURL + '/{noteID}',
   headers: { Authorization: token }
 })
 ```
 Podobnie jak wcześniej, `{noteID}` jest identyfikatorem notatki.
-

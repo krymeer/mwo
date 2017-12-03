@@ -9,7 +9,7 @@ var token = '...';
 ```
 tj. tokena i adresu URL, pod którym można wykonać dane żądanie. Adres dla `DELETE` i `PUT` powinien być rozszerzony o `/{noteID}`, gdzie `{noteID}` jest identyfikatorem notatki (8-znakowym ciągiem alfanumerycznym).
 
-Wspomniany token powinien być umieszczony jako wartość dla dodatkowego nagłówka ‒ `Authorization`.
+Wspomniany token powinien być umieszczony jako wartość dodatkowego nagłówka ‒ `Authorization`.
 
 ## GET
 Pobieranie listy notatek przypisanych do danego użytkownika. Żądanie nie wymaga podania dodatkowych parametrów.
@@ -37,7 +37,7 @@ Jak mówi sama nazwa, `dataAsJSON` powinien być typowym JSON-owym stringiem, np
 Przydatna w tym miejscu może okazać się funkcja `JSON.stringify()`, która zwraca dane w postaci akceptowanej przez TodoApi.
 
 ## PUT
-Jeśli checemy zmodyfikować pewną notatkę, to powinniśmy w adresie URL umieścić jej identyfikator w bazie danych, a także dostarczyć jako parametr w zapytaniu nową treść do wstawienia.
+Jeśli chcemy zmodyfikować pewną notatkę, to powinniśmy w adresie URL umieścić jej identyfikator w bazie danych, a także dostarczyć jako parametr w zapytaniu nową treść do wstawienia.
 ### jQuery
 ```javascript
 $.ajax({

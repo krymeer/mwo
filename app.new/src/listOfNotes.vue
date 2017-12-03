@@ -55,9 +55,11 @@
             if (items.length > 0) {
               this.noNotes = false;
               for (var k = 0; k < items.length; k++) {
-                this.notes.push(
-                  { id: items[k].ID, contents: items[k].Content, showDeletionBar: false }
-                );
+                if (typeof items[k].Content !== 'object') {
+                  this.notes.push(
+                    { id: items[k].ID, contents: items[k].Content, showDeletionBar: false }
+                  );
+                }
               }
             }
             // Here we hide the loader

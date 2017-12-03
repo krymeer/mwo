@@ -73,6 +73,6 @@ $.ajax({
 ```
 ### Vue.js (`vue-resource`)
 ```javascript
-this.$http.put(apiURL + '/{noteID}', { headers: { 'Authorization': token } });
+this.$http.delete(apiURL + '/{noteID}', { headers: { 'Authorization': token } });
 ```
 Podobnie jak wcześniej, `{noteID}` jest identyfikatorem notatki.

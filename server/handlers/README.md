@@ -48,3 +48,16 @@ $.ajax({
 })
 ```
 gdzie `{noteID}` jest identyfikatorem notatki, natomiast `dataAsJSON` ‒ jej nową treścią.
+
+## DELETE
+Aby usunąć wybraną notatkę, wystarczy, że do `apiURL` dodamy jej identyfikator w bazie danych:
+### jQuery
+```javascript
+$.ajax({
+  url: apiURL + '/{noteID}',
+  type: 'DELETE',
+  headers: { Authorization: token }
+})
+```
+Podobnie jak wcześniej, `{noteID}` jest identyfikatorem notatki.
+

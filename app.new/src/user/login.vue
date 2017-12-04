@@ -19,12 +19,17 @@
         <div class="spacer_zero span_2"></div>
         <a id="resetPassBtn" v-if="showResetPassLink" @click="setTab(Tab.RESET_PASS)" class="fblock">nie pamiętam hasła</a>
         <button class="block btn-action" @click="activeTab.action()" :disabled="!isValid" type="button">{{activeTab.actionLabel}}</button>
+        <div class="spacer_zero span_2"></div>
+        <div class="spacer_zero span_2"></div>
+        <a id="gsignin-button" @click="googleSignIn">zaloguj się z Google</a>
+        <a id="gsignout-button" style="display: none;" @click="googleSignOut">Wyloguj z Google</a>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import auth from "./auth";
 import EventBus from "../eventBus";
 import "./login.css";
@@ -159,6 +164,51 @@ export default {
       this.clearInputs();
       target.action = target.action.bind(this);
       this.activeTab = target;
+    },
+    googleSignIn: function() {
+      console.log("Trying to sign in with google");
+      Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
+      console.log("No chyba ide");
+    },
+    onSignInSuccess: function(authorizationCode) {
+      document.getElementById("gsignin-button").style.display = "none";
+      document.getElementById("gsignout-button").style.display = "block";
+      this.$http.post('http://your-backend-server.com/auth/google', { code: authorizationCode, redirect_uri: 'postmessage' }).then(function(response) {
+        if (response.body) {
+          var data = response.body
+          // Save to vuex
+          var token = 'Bearer ' + data.token
+          this.$store.commit('SET_USER', data.user_data)
+          this.$store.commit('SET_TOKEN', token)
+          // Save to local storage as well
+          // ( or you can install the vuex-persistedstate plugin so that you won't have to do this step, only store to Vuex is sufficient )
+          if (window.localStorage) {
+            window.localStorage.setItem('user', JSON.stringify(data.user_data))
+            window.localStorage.setItem('token', token)
+          }
+          // redirect to the dashboard
+          this.$router.push({ name: 'home' })
+        }
+      }, function(response) {
+        var data = response.body
+        this.response = data.error
+        console.log('BACKEND SERVER - SIGN-IN ERROR', data)
+      })
+    },
+    onSignInError: function(error) {
+      this.response = 'Failed to sign-in'
+      console.log('GOOGLE SERVER - SIGN-IN ERROR', error)
+    },
+    googleSignOut: function() {
+      Vue.googleAuth().signOut(function () {
+        // things to do when sign-out succeeds
+        console.log("Signed out from Google!");
+        document.getElementById("gsignin-button").style.display = "block";
+        document.getElementById("gsignout-button").style.display = "none";
+      }, function (error) {
+        // things to do when sign-out fails
+        console.log("Done fucked it up signin' out from Google.");
+      })
     }
   }
 };

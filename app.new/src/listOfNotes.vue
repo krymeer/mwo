@@ -3,7 +3,6 @@
     <h2 class="page_name">pulpit</h2>
     <div class="grid" v-if="loadingFinished">
       <div class="grid" id="control_panel">
-        <googleCalendar></googleCalendar>
         <i v-if="!noNotes" class="material-icons" @click="addNote" data-title="dodaj notatkę" id="add_note">note_add</i>
       </div>
       <div v-if="!noNotes">
@@ -42,7 +41,6 @@
   import EventBus from './eventBus';
   import Vue from 'vue';
   import VueResource from'vue-resource';
-  import googleCalendar from './googleCalendar.vue'
   Vue.use(VueResource);
   export default {
     created: function() {
@@ -134,7 +132,7 @@
       }
     },
     components: {
-      notePopup, loader, googleCalendar
+      notePopup, loader
     }
   }
 </script>

@@ -39,11 +39,17 @@ export default {
     auth.getUser().then(result => {
       this.loggedIn = result !== null
       EventBus.$emit("show-navbar", this.loggedIn);
+        
+      if (window.localStorage.getItem('todoAuthErr') !== null) {
+        window.localStorage.removeItem('todoAuthErr');
+      }
     }).catch(e => {
       console.error(e);
       if (e.toString().indexOf('User is not authenticated') > 0 && window.localStorage.getItem('todoAuthErr') === null) {
-        window.localStorage.setItem('todoAuthErr', true);
-        window.location.href = '/';
+        window.setTimeout(function() {
+          window.localStorage.setItem('todoAuthErr', true);
+          window.location.href = '/';
+        }, 2000);
       }
     });
   },

@@ -6,7 +6,9 @@
       <span @click="sayYes()">Tak</span> /
       <span @click="sayNo()">Nie</span>
     </div>
-    <i v-if="!noSchedule" @click="deleteSchedule()" class="material-icons" id="delete_schedule" data-title="usuń plan">delete</i>
+    <div v-if="loadingFinished" class="grid" id="control_panel">
+      <i v-if="!noSchedule" @click="deleteSchedule()" class="material-icons" id="delete_schedule" data-title="usuń plan">delete</i>
+    </div>
     <div v-if="loadingFinished">
       <div v-if="noSchedule" id="no_schedule_msg">
         Tutaj pojawi się Twój plan zajęć z Edukacji.CL. Użyj rozszerzenia <b>eduParser</b> i pobierz wymagane informacje.

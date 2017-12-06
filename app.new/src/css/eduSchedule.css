@@ -85,16 +85,7 @@
   text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
 }
 
-#delete_schedule {
-  position: absolute;
-  right: .5rem;
-  top: 1rem;
-  font-size: 2.5rem;
-  cursor: pointer;
-}
-
-#deletion_popup > span:hover,
-#delete_schedule:hover {
+#deletion_popup > span:hover {
   color: #b90504;
 }
 

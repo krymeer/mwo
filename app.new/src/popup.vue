@@ -1,6 +1,6 @@
 <template>
   <div class="popup" v-if="showPopup">
-    <span class="popup-message">{{ text }}</span>
+    <span class="popup-message" v-html="text"></span>
     <input :type="message.input"
   </div>
 </template>

@@ -23,7 +23,7 @@
                   <div class="course_code">({{ course.code }})</div>
                 </div>
                 <div class="course_academic">{{ course.academic }}</div>
-                <div class="course_place">{{ course.building }} / {{ course.room }}</div>
+                <div class="course_place" v-if="course.building && course.room">{{ course.building }} / {{ course.room }}</div>
                 <div class="course_type">{{ course.type }}</div>
               </li>
             </ul>

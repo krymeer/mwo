@@ -41,7 +41,7 @@ export default {
       EventBus.$emit("show-navbar", this.loggedIn);
     }).catch(e => {
       console.error(e);
-      if (e.toString().indexOf('User is not authenticated') > 0 && window.localStorage.getItem('todoAuthErr') !== null) {
+      if (e.toString().indexOf('User is not authenticated') > 0 && window.localStorage.getItem('todoAuthErr') === null) {
         window.localStorage.setItem('todoAuthErr', true);
         window.location.href = '/';
       }

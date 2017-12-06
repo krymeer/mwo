@@ -52,6 +52,7 @@ export default {
         "To pole nie może pozostać puste.",
         "Nieprawidłowa nazwa użytkownika lub hasło.",
         "Wylogowanie przebiegło pomyślnie.",
+        new Message("Notatki zostały pobrane.", 3000),
         new Message("Twoje konto nie jest jeszcze aktywne.", false)
       ]
     };

@@ -3,6 +3,7 @@
     <h2 class="page_name">pulpit</h2>
     <div class="grid" v-if="loadingFinished">
       <div class="grid" id="control_panel">
+        <i v-if="!noNotes" class="material-icons" @click="downloadAllNotes" data-title="pobierz notatki">file_download</i>
         <i v-if="!noNotes" class="material-icons" @click="addNote" data-title="dodaj notatkę" id="add_note">note_add</i>
       </div>
       <div v-if="!noNotes">
@@ -46,6 +47,7 @@
     created: function() {
       auth.getUser().then(result => {
         this.token = result.idToken.jwtToken;
+        this.username = result.idToken.payload["cognito:username"];
 
         if (typeof this.token != 'undefined') {
           this.$http.get(apiURL, { headers: { 'Authorization': this.token } }).then(done => {
@@ -94,10 +96,32 @@
       return {
         notes: [],
         noNotes: true,
-        loadingFinished: false
+        loadingFinished: false,
+        username: undefined
       }
     },
     methods: {
+      downloadAllNotes: function() {
+        var fileContents  = '### Notatki użytkownika ' + this.username + '\n\n'
+        var link          = document.createElement('a');
+        var filename  = 'todo_notes.' + this.username + '.txt';
+        var encodedURI;
+
+        for (var k = 0; k < this.notes.length; k++) {
+          fileContents += '* ' + this.notes[k].contents.replace(/<br>/g, '\n') + '\n\n';
+        }
+
+        fileContents = fileContents.replace(/\n\n$/, '');
+
+        encodedURI  = encodeURI(fileContents);;
+        link.setAttribute('download', filename);
+        link.setAttribute('href', 'data:charset=utf-8,' + encodedURI);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        EventBus.$emit("show-popup", 4);
+      },
       addFirstNote: function() {
         this.noNotes = false;
         this.addNote();

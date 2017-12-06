@@ -85,6 +85,24 @@
   text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
 }
 
+#delete_schedule {
+  position: absolute;
+  right: .5rem;
+  top: 1rem;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+#deletion_popup > span:hover,
+#delete_schedule:hover {
+  color: #b90504;
+}
+
+#deletion_popup > span {
+  font-weight: bold;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 720px) {
   .course > div:nth-of-type(2) {
     line-height: 1.5;

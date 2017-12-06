@@ -1,6 +1,12 @@
 <template>
   <div class="grid" id="page_contents">
     <h2 class="page_name">plan zajęć</h2>
+    <div class="popup" id="deletion_popup" v-if="showDeletionPopup">
+      Czy na pewno chcesz usunąć swój plan?
+      <span @click="sayYes()">Tak</span> /
+      <span @click="sayNo()">Nie</span>
+    </div>
+    <i v-if="!noSchedule" @click="deleteSchedule()" class="material-icons" id="delete_schedule" data-title="usuń plan">delete</i>
     <div v-if="loadingFinished">
       <div v-if="noSchedule" id="no_schedule_msg">
         Tutaj pojawi się Twój plan zajęć z Edukacji.CL. Użyj rozszerzenia <b>eduParser</b> i pobierz wymagane informacje.
@@ -50,42 +56,7 @@
       auth.getUser().then(result => {
         if (result !== null) {
           this.token = result.idToken.jwtToken;  
-
-          if (typeof this.token !== 'undefined') {
-            this.$http.get(apiURL, { headers: { 'Authorization': this.token } }).then(done => {
-              var items = done.body.Items;
-              var len   = items.length
-              if (len > 0) {
-                var schedule      = items[len-1].Content;
-                var scheduleFound = false;
-                var k             = len-2;
-
-                // Temporary way of catching the JSON object
-                while (k >= 0) {
-                  if (typeof schedule === 'object') {
-                    scheduleFound = true;
-                    break;
-                  }
-
-                  schedule = items[k].Content;
-                  k--;
-                }
-
-                if (!scheduleFound) {
-                  this.noSchedule = true;
-                }
-                
-                this.schedule = schedule;
-              } else {
-                this.noSchedule = true;
-              }
-              // Here we hide the loader
-              this.loadingFinished = true;
-            }, fail => {
-              console.error('Loading notes failed');
-            });
-          }
-
+          this.getSchedule();
         }
       }).catch(e => {
         console.error(e);
@@ -94,7 +65,66 @@
     components: {
       loader
     },
-    methods: { 
+    methods: {
+      getSchedule: function() {
+        if (typeof this.token !== 'undefined') {
+          this.$http.get(apiURL, { headers: { 'Authorization': this.token } }).then(done => {
+            var items = done.body.Items;
+            var len   = items.length
+            if (len > 0) {
+              var schedule      = items[len-1].Content;
+              var id            = items[len-1].ID;
+              var scheduleFound = false;
+              var k             = len-2;
+
+              // Temporary way of catching the JSON object
+              while (k >= 0) {
+                if (typeof schedule === 'object') {
+                  scheduleFound = true;
+                  break;
+                }
+
+                schedule = items[k].Content;
+                id = items[k].ID;
+                k--;
+              }
+
+              if (!scheduleFound) {
+                this.noSchedule = true;
+              } else {
+                this.schedule = schedule;
+                this.scheduleId = id;
+              }
+              
+            } else {
+              this.noSchedule = true;
+            }
+            // Here we hide the loader
+            this.loadingFinished = true;
+          }, fail => {
+            console.error('Loading notes failed');
+          });
+        }
+      },
+      sayYes: function() {
+        if (typeof this.token !== 'undefined') {
+          this.$http.delete(apiURL + '/' + this.scheduleId, { headers: { 'Authorization': this.token } }).then(done => {
+            this.showDeletionPopup = false;
+            this.loadingFinished = false;
+            this.schedule = undefined;
+            this.scheduleId = undefined;
+            this.getSchedule();
+          }, fail => {
+            console.error('Deleting note failed');
+          });
+        }
+      },
+      sayNo: function() {
+        this.showDeletionPopup = false;
+      },
+      deleteSchedule: function() {
+        this.showDeletionPopup = true;
+      },
       sendToken: function() {
         if (typeof this.token !== 'undefined') {
           var data = { page: 'ToDoApp', token: this.token };
@@ -113,7 +143,9 @@
         token: undefined,
         noSchedule: false,
         loadingFinished: false,
-        schedule: undefined
+        schedule: undefined,
+        scheduleId: undefined,
+        showDeletionPopup: false
       }
     }
   }

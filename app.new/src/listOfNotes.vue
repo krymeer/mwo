@@ -66,6 +66,8 @@
             console.error('Loading notes failed');
           });
         }
+      }).catch(e => {
+        console.error(e);
       });
       EventBus.$on("update-note", (contents, k) => {
         this.notes[k].contents = contents;

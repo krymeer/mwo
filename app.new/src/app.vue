@@ -34,9 +34,17 @@ export default {
       this.loggedIn = false;
       EventBus.$emit("show-popup", 3);    
     });
+
+    // When the error comes, try to catch it
     auth.getUser().then(result => {
       this.loggedIn = result !== null
       EventBus.$emit("show-navbar", this.loggedIn);
+    }).catch(e => {
+      console.error(e);
+      if (e.toString().indexOf('User is not authenticated') > 0 && window.localStorage.getItem('todoAuthErr') !== null) {
+        window.localStorage.setItem('todoAuthErr', true);
+        window.location.href = '/';
+      }
     });
   },
   data: function() {

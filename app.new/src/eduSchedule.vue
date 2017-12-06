@@ -87,6 +87,8 @@
           }
 
         }
+      }).catch(e => {
+        console.error(e);
       });
     },
     components: {

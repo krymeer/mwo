@@ -153,3 +153,27 @@ body {
   background: #fcf8e3;
   border-color: #faebcc;
 }
+
+.nice_btns {
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+  grid-auto-flow: column;
+  grid-gap: 4px;
+  justify-content: start;
+}
+
+.nice_btns li {
+  background: #333;
+  color: #fff;
+  text-transform: lowercase;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.nice_btns li:hover {
+  background: #990100;
+}

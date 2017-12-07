@@ -66,8 +66,11 @@ function sortGroupsByTime(groupsArray) {
         case "so":
           d = 5;
           break;
-        default:
+        case "nd":
           d = 6;
+          break;
+        default:
+          d = 7;
       }   
 
       if (weekType === 'TN+1/2') {

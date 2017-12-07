@@ -63,6 +63,43 @@ function handleToDoApp(dataArray) {
   });
 }
 
+function getPlanAsText(dataArray) {
+  var str = '';
+  var n   = dataArray.length
+  for (var k = 0; k < n; k++) {
+    var day = dataArray[k];
+    str += day.weekDay.toUpperCase() + '\n\n';
+
+    for (var j = 0; j < day.courses.length; j++) {
+      var group = day.courses[j];
+      str += ' ' + group.courseName + ' (' + group.code + ') [' + group.type +']' 
+      
+      if (typeof group.hours !== 'undefined') {
+        str += '\n  ' + group.hours;
+      }
+
+      if (typeof group.weekType !== 'undefined') {
+        str += ' ' + group.weekType;
+      }
+
+      str += '\n  ';
+      str += group.academic.charAt(0).toLowerCase() + group.academic.slice(1);
+
+      if (typeof group.building !== 'undefined') {
+        str += '\n  ' + group.building + ' / ' + group.room;
+      }
+
+      str += '\n\n';
+    }
+    
+    str += '---\n\n';
+  }
+
+  str += 'Wygenerowano w rozszerzeniu eduParser. \u00A9 2017 Krzysztof Osada';
+
+  return str;
+}
+
 function handleDownload(dataArray) {
   $('#download_btns li').click(function() {
     var id        = $(this).attr('id').slice(9);
@@ -73,6 +110,8 @@ function handleDownload(dataArray) {
 
     if (id === 'json') {
       str = JSON.stringify(dataArray);
+    } else if (id === 'txt') {
+      str = getPlanAsText(dataArray);
     }
 
     // TODO handling other file extensions
@@ -99,11 +138,11 @@ function handleEduCLPage() {
           code: '('+ getPageContents +')();'
         }, (results) => {
           if (results.length > 0) {
-            var data = results[0];
-            var i1 = data.indexOf('W wybranym semestrze nie jesteś zapisany(na) do żadnej grupy zajęciowej.');
-            var i3 = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
-            var i4 = data.indexOf('<!-- grupy zajeciowe: poczatek -->');
-            var i5 = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
+            var data  = results[0];
+            var i1    = data.indexOf('W wybranym semestrze nie jesteś zapisany(na) do żadnej grupy zajęciowej.');
+            var i3    = data.indexOf('hrefZapisaneGrupySluchaczaTabela');
+            var i4    = data.indexOf('<!-- grupy zajeciowe: poczatek -->');
+            var i5    = data.indexOf('<!-- grupy zajeciowe zapisane administracyjnie: koniec -->');
 
             if (i1 > 0) {
               showMessageSection(3, 1);

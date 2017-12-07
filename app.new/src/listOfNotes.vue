@@ -3,6 +3,7 @@
     <h2 class="page_name">pulpit</h2>
     <div class="grid" v-if="loadingFinished">
       <div class="grid" id="control_panel">
+        <i v-if="!noNotes" class="material-icons" @click="sortNotes" :data-title="sortType">sort_by_alpha</i>
         <i v-if="!noNotes" class="material-icons" @click="downloadAllNotes" data-title="pobierz notatki">file_download</i>
         <i v-if="!noNotes" class="material-icons" @click="addNote" data-title="dodaj notatkę" id="add_note">note_add</i>
       </div>
@@ -35,6 +36,8 @@
 
 <script>
   const apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
+  const sortTypeAZ = 'sortuj A-Z';
+  const sortTypeZA = 'sortuj Z-A';
   import './css/listOfNotes.css';
   import notePopup from './notePopup.vue';
   import loader from './loader.vue';
@@ -97,10 +100,31 @@
         notes: [],
         noNotes: true,
         loadingFinished: false,
-        username: undefined
+        username: undefined,
+        sortType: sortTypeAZ,
+        sortInit: true
       }
     },
     methods: {
+      sortNotes: function(event) {
+        var l = -1, r = 1;
+        
+        if (this.sortType === sortTypeZA && !this.sortInit) {
+          l = -l;
+          r = -r;
+          this.sortType = sortTypeAZ;
+        } else {
+          this.sortType = sortTypeZA;
+          
+          if (this.sortInit) {
+            this.sortInit = false;
+          }
+        }
+
+        this.notes.sort(function(a, b) {
+          return (a.contents <= b.contents) ? l : r;
+        });
+      },
       downloadAllNotes: function() {
         var fileContents  = '### Notatki użytkownika ' + this.username + '\n\n'
         var link          = document.createElement('a');

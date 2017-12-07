@@ -14,27 +14,7 @@
 }
 
 #download_btns {
-  margin: 4px 0;
-  padding: 0;
-  list-style: none;
   grid-template-columns: repeat(8, auto);
-  grid-gap: 4px;
-  justify-content: start;
-}
-
-#download_btns li {
-  background: #333;
-  color: #fff;
-  text-transform: lowercase;
-  font-size: 12px;
-  padding: 4px;
-  border-radius: 4px;
-  cursor: pointer;
-  justify-self: start;
-}
-
-#download_btns li:hover {
-  background: #990100;
 }
 
 #goto_todoapp {
@@ -49,4 +29,17 @@
 
 #goto_todoapp:hover span:first-of-type {
   color: #555;
+}
+
+#schedule_exists {
+  grid-row-gap: 4px;
+}
+
+#schedule_exists .nice_btns {
+  justify-content: center;
+}
+
+#schedule_exists > span:first-of-type {
+  padding-right: 30px;
+  text-align: justify;
 }

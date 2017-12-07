@@ -1,3 +1,5 @@
+const apiURL = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
+
 function getPageContents() {
   return document.body.innerHTML;
 }
@@ -5,6 +7,9 @@ function getPageContents() {
 function showSection(sectionName) {
   $('.contents').addClass('hidden');
   $('#' + sectionName).removeClass('hidden');
+  if (sectionName === 'menu') {
+    $('#back_btn').addClass('hidden');
+  }
 }
 
 function showMessageSection(k, l) {
@@ -26,38 +31,89 @@ function showMessageSection(k, l) {
   showSection('error');
 }
 
+function checkTokenValidity(response) {
+  if (response) {
+    console.log(response)
+
+    if (response.indexOf('Identity token has expired') !== -1) {
+      chrome.storage.sync.clear(function() {
+        console.log('All the items from storage removed')
+      });
+    }
+  }
+}
+
+function overwriteSchedule(body, token, oldId) {
+  $.ajax({
+    type: 'DELETE',
+    url: apiURL + '/' + oldId,
+    headers: { Authorization: token }
+  })
+  .done(function() {
+    addSchedule(body, token);
+  })
+  .fail(function(response) {
+    showMessageSection(6, 0);
+    checkTokenValidity(response.responseText);
+  });
+}
+
+function addSchedule(body, token) {
+  $.ajax({
+    type: 'POST',
+    url: apiURL,
+    data: body,
+    headers: { Authorization: token }
+  })
+  .done(function() {
+    showMessageSection(5, 2);
+  })
+  .fail(function(response) {
+    showMessageSection(6, 0);
+    checkTokenValidity(response.responseText);
+  });
+}
+
 function handleToDoApp(dataArray) {
   $('#goto_todoapp').click(function() {
     if (!token) {
       showMessageSection(4, 0);
     } else {
-      const apiURL  = 'https://xjtxrfc6a1.execute-api.eu-central-1.amazonaws.com/v1/todo';
       var body      = { Content: dataArray };
       var bodyJSON  = JSON.stringify(body);
 
       $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: apiURL,
-        data: bodyJSON,
         headers: { Authorization: token }
       })
-      .done(function() {
-        showMessageSection(5, 2);
+      .done(function(response) {
+        var items           = response.Items;
+        var scheduleExists  = false;
+        var oldScheduleId;
+
+        for (var k = 0; k < items.length; k++) {
+          if (typeof items[k].Content !== 'string') {
+            scheduleExists = true;
+            oldScheduleId = items[k].ID;
+            break;
+          }
+        }
+
+        if (scheduleExists) {
+          showSection('schedule_exists');
+          $('#schedule_exists .yes').click(function() {
+            overwriteSchedule(bodyJSON, token, oldScheduleId);
+          });
+          $('#schedule_exists .no').click(function() {
+            showSection('menu');
+          });
+        } else {
+          addSchedule(bodyJSON, token);
+        }
       })
       .fail(function(response) {
         showMessageSection(6, 0);
-
-        var responseText = response.responseText;
-        if (responseText) {
-          console.log(responseText)
-      
-          if (responseText.indexOf('Identity token has expired') !== -1) {
-            chrome.storage.sync.clear(function() {
-              console.log('All the items from storage removed')
-            });
-          }
-        }
-  
       });
     }
   });

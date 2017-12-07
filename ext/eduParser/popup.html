@@ -32,6 +32,14 @@
             <div>o rozszerzeniu</div>
           </li>
         </ul>
+        <div class="contents grid font_small hidden" id="schedule_exists">
+          <span>Z Twoim kontem powiązany jest już inny plan zajęć. Czy chcesz go nadpisać?</span>
+          <ul class="grid nice_btns">
+            <li class="yes">Tak</li>
+            <li class="no">Nie</li>
+          </ul>
+          <span class="font_tiny">Uwaga: ta operacja <b>jest nieodwracalna</b>.</span>
+        </div>
         <div class="contents grid hidden" id="about">
           <div>eduParser v0.3</div>
           <div>Rozszerzenie umożliwiające wygenerowanie planu zajęć na podstawie danych z <a href="https://edukacja.pwr.wroc.pl" target="blank">Edukacji.CL</a>.</div>
@@ -45,7 +53,7 @@
           <div class="margin_bottom grid" id="goto_todoapp">
             <span>Umieść je w</span><span class="todoapp_link small">ToDoApp</span></div>
           <div class="font_small">Pobierz je jako:</div>
-          <ul class="grid" id="download_btns">
+          <ul class="grid nice_btns" id="download_btns">
             <li id="download_json">JSON</li>
             <li id="download_txt">TXT</li>
           </ul>
